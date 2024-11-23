@@ -10,9 +10,19 @@ interface QuizResultsProps {
   recommendations: string[];
   onRetake: () => void;
   answers: Record<number, string>;
+  assessorInfo?: {
+    name: string;
+    email: string;
+  };
 }
 
-const QuizResults = ({ score, recommendations, onRetake, answers }: QuizResultsProps) => {
+const QuizResults = ({ 
+  score, 
+  recommendations, 
+  onRetake, 
+  answers,
+  assessorInfo 
+}: QuizResultsProps) => {
   const navigate = useNavigate();
   
   const getMessage = (score: number) => {
@@ -74,7 +84,7 @@ const QuizResults = ({ score, recommendations, onRetake, answers }: QuizResultsP
         </h3>
         <ul className="space-y-3">
           {recommendations.map((course, index) => (
-            <li key={index} className="p-4 bg-muted/50 rounded-lg">
+            <li key={index} className="p-4 bg-muted/50 rounded-lg hover:bg-muted/70 transition-colors">
               {course}
             </li>
           ))}
@@ -85,6 +95,8 @@ const QuizResults = ({ score, recommendations, onRetake, answers }: QuizResultsP
         <QuizCertificate 
           score={score}
           date={new Date().toLocaleDateString()}
+          assessorName={assessorInfo?.name}
+          assessorEmail={assessorInfo?.email}
         />
       )}
 

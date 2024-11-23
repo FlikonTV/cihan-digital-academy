@@ -13,6 +13,12 @@ import {
 } from "@/components/ui/collapsible";
 import { useState } from "react";
 
+// Default assessor information - in a real app, this might come from environment variables or a configuration file
+const DEFAULT_ASSESSOR = {
+  name: "Celestine Achi",
+  email: "training@cihanmediacomms.com"
+};
+
 const PreAssessmentQuiz = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -78,6 +84,7 @@ const PreAssessmentQuiz = () => {
         recommendations={getRecommendations(score)}
         onRetake={handleRetake}
         answers={answers}
+        assessorInfo={DEFAULT_ASSESSOR}
       />
     );
   }
