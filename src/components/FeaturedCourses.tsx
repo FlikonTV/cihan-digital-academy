@@ -36,6 +36,33 @@ const courses = [
     dates: ["2025-02-27", "2025-06-20", "2025-10-24"],
     price: "NGN 35,000",
     image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    title: "Masterclass in AI Automation (MAA)",
+    description: "Master workflow automation and process optimization techniques",
+    duration: "2 Days",
+    level: "Advanced",
+    dates: ["2025-03-21", "2025-06-18", "2025-12-05"],
+    price: "NGN 300,000",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    title: "AI-Driven Data Analytics and Business Intelligence",
+    description: "Learn data analysis methodologies and strategic decision-making",
+    duration: "2 Days",
+    level: "Professional",
+    dates: ["2025-01-30", "2025-06-27", "2025-12-05"],
+    price: "NGN 350,000",
+    image: "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    title: "Certificate Program in Responsible AI Implementation",
+    description: "Master ethical AI deployment and governance frameworks",
+    duration: "2 Days",
+    level: "Professional",
+    dates: ["2025-02-13", "2025-07-24", "2025-12-11"],
+    price: "NGN 250,000",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
