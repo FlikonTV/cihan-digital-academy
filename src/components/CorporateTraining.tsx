@@ -150,13 +150,17 @@ const CorporateTraining = () => {
               <div className="mt-12 pt-8 border-t border-gray-200">
                 <h4 className="text-xl font-semibold mb-6 text-gray-800">Contact Us Directly</h4>
                 <div className="space-y-4">
-                  <a href="mailto:contact@cihandigital.com" className="flex items-center text-gray-600 hover:text-primary transition-colors group">
+                  <a href="mailto:cdatraining@cihanmediacomms.com" className="flex items-center text-gray-600 hover:text-primary transition-colors group">
                     <Mail className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                    contact@cihandigital.com
+                    cdatraining@cihanmediacomms.com
                   </a>
-                  <a href="tel:+1234567890" className="flex items-center text-gray-600 hover:text-primary transition-colors group">
+                  <a href="tel:08029610429" className="flex items-center text-gray-600 hover:text-primary transition-colors group">
                     <Phone className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                    +123 456 7890
+                    08029610429
+                  </a>
+                  <a href="tel:08099997175" className="flex items-center text-gray-600 hover:text-primary transition-colors group">
+                    <Phone className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
+                    08099997175
                   </a>
                 </div>
               </div>
