@@ -5,17 +5,21 @@ import DeliveryMethods from "@/components/DeliveryMethods";
 import FeaturedCourses from "@/components/FeaturedCourses";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import CorporateTraining from "@/components/CorporateTraining";
+import Footer from "@/components/Footer";  // Add this import
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <Hero />
-      <TabsDFramework />
-      <DeliveryMethods />
-      <FeaturedCourses />
-      <WhyChooseUs />
-      <CorporateTraining />
+      <div className="flex-grow">
+        <Hero />
+        <TabsDFramework />
+        <DeliveryMethods />
+        <FeaturedCourses />
+        <WhyChooseUs />
+        <CorporateTraining />
+      </div>
+      <Footer />
     </div>
   );
 };
