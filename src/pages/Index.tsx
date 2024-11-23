@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import TabsDFramework from "@/components/TabsDFramework";
 import DeliveryMethods from "@/components/DeliveryMethods";
 import FeaturedCourses from "@/components/FeaturedCourses";
 import WhyChooseUs from "@/components/WhyChooseUs";
@@ -10,6 +11,7 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
+      <TabsDFramework />
       <DeliveryMethods />
       <FeaturedCourses />
       <WhyChooseUs />
