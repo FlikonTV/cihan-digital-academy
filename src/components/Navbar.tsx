@@ -19,7 +19,7 @@ const Navbar = () => {
         <div className="flex justify-between h-20">
           <div className="flex-shrink-0 flex items-center">
             <img 
-              src="https://cihanmediacomms.com/wp-content/uploads/2023/10/Cihan-Media-Logo-1.png" 
+              src="/lovable-uploads/fb11656c-f7bd-42f1-a004-ba1a2869a8cb.png" 
               alt="Cihan Digital Academy" 
               className="h-10 w-auto"
             />
