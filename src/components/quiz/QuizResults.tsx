@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Trophy, BookOpen, Check, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { mockQuestions } from "./hooks/useQuizState";
+import QuizCertificate from "./QuizCertificate";
 
 interface QuizResultsProps {
   score: number;
@@ -80,7 +81,14 @@ const QuizResults = ({ score, recommendations, onRetake, answers }: QuizResultsP
         </ul>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4">
+      {score >= 60 && (
+        <QuizCertificate 
+          score={score}
+          date={new Date().toLocaleDateString()}
+        />
+      )}
+
+      <div className="flex flex-col sm:flex-row gap-4 mt-8">
         <Button onClick={onRetake} variant="outline" className="flex-1">
           Retake Quiz
         </Button>

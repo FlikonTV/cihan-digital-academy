@@ -15,6 +15,8 @@ import { useState } from "react";
 
 const PreAssessmentQuiz = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  
   const {
     currentQuestionIndex,
     answers,
@@ -56,6 +58,16 @@ const PreAssessmentQuiz = () => {
       "AI for Digital Content Creation and SEO",
       "Masterclass in Digital Communication and Data-Driven Analytics (MDCDA)"
     ];
+  };
+
+  const handleAnswerWithFeedback = (answer: string) => {
+    handleAnswer(answer);
+    setShowFeedback(true);
+  };
+
+  const handleNextWithFeedback = () => {
+    setShowFeedback(false);
+    handleNext();
   };
 
   if (showResults) {
@@ -100,20 +112,20 @@ const PreAssessmentQuiz = () => {
         />
         <ActivityMonitor onSuspiciousActivity={addSuspiciousActivity} />
         
-        <div className="text-sm text-gray-500 mb-4">
-          Question {currentQuestionIndex + 1} of {mockQuestions.length}
-        </div>
-        
         <QuizQuestion
           question={currentQuestion.question}
           options={currentQuestion.options}
-          onAnswer={handleAnswer}
+          onAnswer={handleAnswerWithFeedback}
           currentAnswer={answers[currentQuestionIndex]}
+          showFeedback={showFeedback}
+          correctAnswer={currentQuestion.correct_answer}
+          currentQuestionIndex={currentQuestionIndex}
+          totalQuestions={mockQuestions.length}
         />
 
         <div className="flex justify-end">
           <Button
-            onClick={handleNext}
+            onClick={handleNextWithFeedback}
             disabled={!answers[currentQuestionIndex]}
             className="flex items-center"
           >
