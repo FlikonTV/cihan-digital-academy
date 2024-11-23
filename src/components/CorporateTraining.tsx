@@ -1,5 +1,9 @@
 import { Building2, Mail, Phone } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Select,
   SelectContent,
@@ -7,9 +11,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FormError } from "@/components/ui/form-error";
+import { Button } from "@/components/ui/button";
+
+const formSchema = z.object({
+  companyName: z.string().min(2, "Company name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+  courseTitle: z.string().min(1, "Please select a course")
+});
+
+type FormData = z.infer<typeof formSchema>;
 
 const CorporateTraining = () => {
-  const [selectedCourse, setSelectedCourse] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema)
+  });
+
+  const selectedCourse = watch("courseTitle");
 
   const courses = [
     "Masterclass in Artificial Intelligence (MAI)",
@@ -22,6 +49,27 @@ const CorporateTraining = () => {
     "AI for Digital Content Creation and SEO",
     "AI-Driven Data Analytics and Business Intelligence"
   ];
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      setIsSubmitting(true);
+      // Here you would typically make an API call
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+      
+      toast({
+        title: "Request Submitted",
+        description: "We'll get back to you shortly regarding your training request.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "There was a problem submitting your request. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="corporate" className="py-20 bg-gradient-to-b from-white to-muted/30">
@@ -43,56 +91,75 @@ const CorporateTraining = () => {
                 <h3 className="text-2xl font-semibold ml-4">Request Corporate Training</h3>
               </div>
               
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Company Name</label>
+                  <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">
+                    Company Name
+                  </label>
                   <input
-                    type="text"
+                    id="companyName"
+                    {...register("companyName")}
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-gray-50/50"
                     placeholder="Enter your company name"
+                    aria-describedby={errors.companyName ? "companyName-error" : undefined}
                   />
+                  {errors.companyName && (
+                    <FormError message={errors.companyName.message} />
+                  )}
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Email</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Email
+                  </label>
                   <input
+                    id="email"
                     type="email"
+                    {...register("email")}
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-gray-50/50"
                     placeholder="Enter your email"
+                    aria-describedby={errors.email ? "email-error" : undefined}
                   />
+                  {errors.email && (
+                    <FormError message={errors.email.message} />
+                  )}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Course of Interest</label>
-                  <div className="relative">
-                    <Select value={selectedCourse} onValueChange={setSelectedCourse}>
-                      <SelectTrigger className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-gray-50/50 hover:bg-gray-100/50">
-                        <SelectValue 
-                          placeholder="Select a course" 
-                          className="text-gray-500 placeholder:text-gray-400"
-                        />
-                      </SelectTrigger>
-                      <SelectContent className="max-h-[300px] overflow-y-auto">
-                        <div className="px-2 py-2 text-sm text-gray-500 bg-gray-50">
-                          Select from our available courses
-                        </div>
-                        {courses.map((course) => (
-                          <SelectItem 
-                            key={course} 
-                            value={course}
-                            className="py-3 px-4 cursor-pointer hover:bg-primary/5 focus:bg-primary/5 rounded-md transition-colors"
-                          >
-                            <span className="font-medium text-gray-700">{course}</span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
+                  <label htmlFor="courseTitle" className="block text-sm font-medium text-gray-700">
+                    Course of Interest
+                  </label>
+                  <Select 
+                    onValueChange={(value) => setValue("courseTitle", value)}
+                    value={selectedCourse}
+                  >
+                    <SelectTrigger 
+                      id="courseTitle"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-gray-50/50 hover:bg-gray-100/50"
+                    >
+                      <SelectValue 
+                        placeholder="Select a course" 
+                        className="text-gray-500 placeholder:text-gray-400"
+                      />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px] overflow-y-auto">
+                      <div className="px-2 py-2 text-sm text-gray-500 bg-gray-50">
+                        Select from our available courses
+                      </div>
+                      {courses.map((course) => (
+                        <SelectItem 
+                          key={course} 
+                          value={course}
+                          className="py-3 px-4 cursor-pointer hover:bg-primary/5 focus:bg-primary/5 rounded-md transition-colors"
+                        >
+                          <span className="font-medium text-gray-700">{course}</span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.courseTitle && (
+                    <FormError message={errors.courseTitle.message} />
+                  )}
                   {selectedCourse && (
                     <p className="text-sm text-primary mt-2 animate-fade-in">
                       Selected: {selectedCourse}
@@ -101,20 +168,39 @@ const CorporateTraining = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Message</label>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+                    Message
+                  </label>
                   <textarea
+                    id="message"
+                    {...register("message")}
                     rows={4}
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-gray-50/50"
                     placeholder="Tell us about your training needs"
+                    aria-describedby={errors.message ? "message-error" : undefined}
                   />
+                  {errors.message && (
+                    <FormError message={errors.message.message} />
+                  )}
                 </div>
                 
-                <button
+                <Button
                   type="submit"
                   className="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-secondary transition-colors duration-300 transform hover:scale-[1.02] active:scale-[0.98] font-medium"
+                  disabled={isSubmitting}
                 >
-                  Submit Request
-                </button>
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Submitting...
+                    </span>
+                  ) : (
+                    "Submit Request"
+                  )}
+                </Button>
               </form>
             </div>
             
@@ -150,15 +236,19 @@ const CorporateTraining = () => {
               <div className="mt-12 pt-8 border-t border-gray-200">
                 <h4 className="text-xl font-semibold mb-6 text-gray-800">Contact Us Directly</h4>
                 <div className="space-y-4">
-                  <a href="mailto:cdatraining@cihanmediacomms.com" className="flex items-center text-gray-600 hover:text-primary transition-colors group">
+                  <a 
+                    href="mailto:cdatraining@cihanmediacomms.com" 
+                    className="flex items-center text-gray-600 hover:text-primary transition-colors group"
+                    aria-label="Email us at cdatraining@cihanmediacomms.com"
+                  >
                     <Mail className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
                     cdatraining@cihanmediacomms.com
                   </a>
-                  <a href="tel:08029610429" className="flex items-center text-gray-600 hover:text-primary transition-colors group">
-                    <Phone className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-                    08029610429
-                  </a>
-                  <a href="tel:08099997175" className="flex items-center text-gray-600 hover:text-primary transition-colors group">
+                  <a 
+                    href="tel:08099997175" 
+                    className="flex items-center text-gray-600 hover:text-primary transition-colors group"
+                    aria-label="Call us at 08099997175"
+                  >
                     <Phone className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
                     08099997175
                   </a>
