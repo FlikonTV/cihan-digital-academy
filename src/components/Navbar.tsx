@@ -21,7 +21,7 @@ const Navbar = () => {
             <img 
               src="/lovable-uploads/fb11656c-f7bd-42f1-a004-ba1a2869a8cb.png" 
               alt="Cihan Digital Academy" 
-              className="h-10 w-auto"
+              className="h-12 w-auto transform hover:scale-105 transition-transform duration-300"
             />
           </div>
           
@@ -30,7 +30,7 @@ const Navbar = () => {
               <a
                 key={index}
                 href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
-                className="text-gray-700 hover:text-primary transition-colors duration-300 text-sm font-medium"
+                className="text-gray-700 hover:text-primary transition-colors duration-300 text-sm font-medium relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
               >
                 {item}
               </a>
@@ -38,7 +38,7 @@ const Navbar = () => {
             <a 
               href="#courses" 
               onClick={scrollToCourses}
-              className="bg-primary text-white px-6 py-2.5 rounded-md hover:bg-secondary transition-all duration-300 transform hover:scale-105 text-sm font-medium shadow-md hover:shadow-lg"
+              className="bg-primary text-white px-6 py-2.5 rounded-md hover:bg-secondary transition-all duration-300 transform hover:scale-105 text-sm font-medium shadow-md hover:shadow-lg hover:shadow-primary/25"
             >
               Enroll Now
             </a>
@@ -47,7 +47,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button 
               onClick={() => setIsOpen(!isOpen)} 
-              className="text-gray-700 hover:text-primary transition-colors duration-300"
+              className="text-gray-700 hover:text-primary transition-colors duration-300 p-2 rounded-md hover:bg-primary/5"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -62,7 +62,7 @@ const Navbar = () => {
               <a
                 key={index}
                 href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
-                className="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-gray-50 rounded-md transition-colors duration-300 text-sm font-medium"
+                className="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-primary/5 rounded-md transition-all duration-300 text-sm font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 {item}

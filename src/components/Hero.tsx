@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 
 const Hero = () => {
   return (
-    <div className="relative min-h-screen flex items-center bg-gradient-to-br from-[#F1F0FB] via-white to-[#E5DEFF] pt-24 overflow-hidden">
+    <div className="relative min-h-screen flex items-center bg-gradient-to-br from-[#F1F0FB] via-white to-[#E5DEFF] pt-28 overflow-hidden">
       {/* Decorative background patterns */}
       <div className="absolute inset-0 bg-grid-black/[0.02] -z-10" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/50" />
@@ -11,7 +11,7 @@ const Hero = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <div className="text-left max-w-2xl animate-fade-up">
-            <div className="inline-block px-4 py-2 mb-6 rounded-full bg-primary/10 text-primary font-medium text-sm animate-fade-up shadow-sm" style={{ animationDelay: '200ms' }}>
+            <div className="inline-block px-6 py-2.5 mb-8 rounded-full bg-primary/10 text-primary font-medium text-sm animate-fade-up shadow-md hover:shadow-glow transition-shadow duration-300" style={{ animationDelay: '200ms' }}>
               Welcome to Cihan Digital Academy
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight animate-fade-up" style={{ animationDelay: '400ms' }}>
@@ -23,7 +23,7 @@ const Hero = () => {
               Master the technologies shaping tomorrow's world.
             </p>
             {/* Accreditation Badge */}
-            <div className="mb-8 p-4 border border-primary/20 rounded-lg bg-white/50 backdrop-blur-sm shadow-sm animate-fade-up" style={{ animationDelay: '700ms' }}>
+            <div className="mb-8 p-4 border border-primary/20 rounded-lg bg-white/50 backdrop-blur-sm shadow-md hover:shadow-glow transition-all duration-300 animate-fade-up" style={{ animationDelay: '700ms' }}>
               <p className="text-sm font-medium text-gray-900 flex items-center gap-2">
                 <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
                 All Courses are Accredited by the Institute of Information Management, Africa
