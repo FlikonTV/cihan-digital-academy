@@ -1,31 +1,51 @@
 import { Badge } from "@/components/ui/badge";
 import { Clock, Users, Trophy } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import CourseRegistrationForm from "./CourseRegistrationForm";
 
 const courses = [
   {
-    title: "AI Fundamentals",
+    title: "Masterclass in Artificial Intelligence (MAI)",
     description: "Learn the core concepts of artificial intelligence and machine learning",
-    duration: "8 weeks",
-    level: "Beginner",
+    duration: "2 Days",
+    level: "Professional",
+    dates: ["2025-02-20", "2025-05-15", "2025-09-18"],
+    price: "NGN 300,000",
     image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800&q=80"
   },
   {
-    title: "Deep Learning Specialization",
-    description: "Master neural networks and deep learning algorithms",
-    duration: "12 weeks",
-    level: "Advanced",
+    title: "Executive Masterclass in AI for Management Insights",
+    description: "Master strategic AI integration and organizational transformation",
+    duration: "2 Days",
+    level: "Executive",
+    dates: ["2025-03-14", "2025-07-11", "2025-11-14"],
+    price: "NGN 500,000",
     image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80"
   },
   {
-    title: "Applied AI Projects",
-    description: "Build real-world AI applications with industry mentors",
-    duration: "10 weeks",
+    title: "Masterclass in Prompt Engineering (MPE)",
+    description: "Master prompt crafting and AI interaction optimization",
+    duration: "2 Days",
     level: "Intermediate",
+    dates: ["2025-02-27", "2025-06-20", "2025-10-24"],
+    price: "NGN 35,000",
     image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
 const FeaturedCourses = () => {
+  const [selectedCourse, setSelectedCourse] = useState<{
+    title: string;
+    date: string;
+    price: string;
+  } | null>(null);
+
   return (
     <section id="courses" className="py-20">
       <div className="container mx-auto px-4">
@@ -58,14 +78,50 @@ const FeaturedCourses = () => {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">{course.title}</h3>
                 <p className="text-gray-600 mb-4">{course.description}</p>
-                <button className="w-full bg-primary text-white py-2 rounded-md hover:bg-secondary transition-colors">
-                  Learn More
-                </button>
+                <div className="space-y-4">
+                  <div className="text-sm text-gray-600">
+                    <strong>Next Sessions:</strong>
+                    <ul className="mt-2 space-y-1">
+                      {course.dates.map((date, idx) => (
+                        <li key={idx} className="flex justify-between items-center">
+                          <span>{new Date(date).toLocaleDateString()}</span>
+                          <button
+                            onClick={() => setSelectedCourse({
+                              title: course.title,
+                              date: date,
+                              price: course.price
+                            })}
+                            className="text-primary hover:text-secondary"
+                          >
+                            Register
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <p className="text-lg font-semibold text-gray-900">{course.price}</p>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      <Dialog open={!!selectedCourse} onOpenChange={() => setSelectedCourse(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Course Registration</DialogTitle>
+          </DialogHeader>
+          {selectedCourse && (
+            <CourseRegistrationForm
+              courseTitle={selectedCourse.title}
+              courseDate={selectedCourse.date}
+              coursePrice={selectedCourse.price}
+              onClose={() => setSelectedCourse(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
