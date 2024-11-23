@@ -4,6 +4,15 @@ import { Menu, X } from "lucide-react";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const scrollToCourses = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const coursesSection = document.getElementById('courses');
+    if (coursesSection) {
+      coursesSection.scrollIntoView({ behavior: 'smooth' });
+      setIsOpen(false);
+    }
+  };
+
   return (
     <nav className="fixed w-full bg-white/95 backdrop-blur-sm z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,6 +37,7 @@ const Navbar = () => {
             ))}
             <a 
               href="#courses" 
+              onClick={scrollToCourses}
               className="bg-primary text-white px-6 py-2.5 rounded-md hover:bg-secondary transition-all duration-300 transform hover:scale-105 text-sm font-medium shadow-md hover:shadow-lg"
             >
               Enroll Now
@@ -60,8 +70,8 @@ const Navbar = () => {
             ))}
             <a 
               href="#courses" 
+              onClick={scrollToCourses}
               className="block px-3 py-2 text-primary font-medium hover:bg-primary hover:text-white rounded-md transition-all duration-300 text-sm"
-              onClick={() => setIsOpen(false)}
             >
               Enroll Now
             </a>
