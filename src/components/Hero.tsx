@@ -22,6 +22,13 @@ const Hero = () => {
               Join Cihan Digital Academy for cutting-edge AI training delivered through flexible learning methods. 
               Master the technologies shaping tomorrow's world.
             </p>
+            {/* Accreditation Badge */}
+            <div className="mb-8 p-4 border border-primary/20 rounded-lg bg-white/50 backdrop-blur-sm shadow-sm animate-fade-up" style={{ animationDelay: '700ms' }}>
+              <p className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                All Courses are Accredited by the Institute of Information Management, Africa
+              </p>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-up" style={{ animationDelay: '800ms' }}>
               <a 
                 href="#courses" 
