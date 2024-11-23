@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import QuizQuestion from "./QuizQuestion";
 import QuizResults from "./QuizResults";
+import WebcamMonitor from "./WebcamMonitor";
+import ActivityMonitor from "./ActivityMonitor";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
@@ -63,6 +69,42 @@ const PreAssessmentQuiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showResults, setShowResults] = useState(false);
+  const [quizAttemptId] = useState(uuidv4());
+  const [suspiciousActivities, setSuspiciousActivities] = useState<string[]>([]);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleSuspiciousActivity = (activity: string) => {
+    setSuspiciousActivities(prev => [...prev, activity]);
+    toast({
+      variant: "destructive",
+      title: "Warning",
+      description: "Suspicious activity detected. This will be recorded.",
+    });
+  };
+
+  const handlePhotoCapture = async (photoBlob: Blob) => {
+    try {
+      const photoPath = `quiz-photos/${quizAttemptId}.jpg`;
+      const { error: uploadError } = await supabase.storage
+        .from('quiz-photos')
+        .upload(photoPath, photoBlob);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('quiz-photos')
+        .getPublicUrl(photoPath);
+
+      await supabase.from('quiz_proctoring_data').insert({
+        quiz_attempt_id: quizAttemptId,
+        verification_photo_url: publicUrl,
+        suspicious_activities: suspiciousActivities
+      });
+    } catch (error) {
+      console.error('Error saving verification photo:', error);
+    }
+  };
 
   const handleAnswer = (answer: string) => {
     setAnswers(prev => ({ ...prev, [currentQuestionIndex]: answer }));
@@ -73,6 +115,10 @@ const PreAssessmentQuiz = () => {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
       setShowResults(true);
+      // Save final proctoring data
+      supabase.from('quiz_proctoring_data')
+        .update({ suspicious_activities: suspiciousActivities })
+        .eq('quiz_attempt_id', quizAttemptId);
     }
   };
 
@@ -126,6 +172,12 @@ const PreAssessmentQuiz = () => {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
+      <WebcamMonitor 
+        onSuspiciousActivity={handleSuspiciousActivity}
+        onPhotoCapture={handlePhotoCapture}
+      />
+      <ActivityMonitor onSuspiciousActivity={handleSuspiciousActivity} />
+      
       <div className="text-sm text-gray-500 mb-4">
         Question {currentQuestionIndex + 1} of {mockQuestions.length}
       </div>

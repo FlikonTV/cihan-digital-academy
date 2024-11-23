@@ -93,6 +93,33 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_proctoring_data: {
+        Row: {
+          created_at: string | null
+          id: string
+          quiz_attempt_id: string
+          suspicious_activities: Json | null
+          user_id: string | null
+          verification_photo_url: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          quiz_attempt_id: string
+          suspicious_activities?: Json | null
+          user_id?: string | null
+          verification_photo_url?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          quiz_attempt_id?: string
+          suspicious_activities?: Json | null
+          user_id?: string | null
+          verification_photo_url?: string | null
+        }
+        Relationships: []
+      }
       registrations: {
         Row: {
           course_date: string
