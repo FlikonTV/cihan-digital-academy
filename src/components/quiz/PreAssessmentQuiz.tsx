@@ -1,36 +1,75 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import QuizQuestion from "./QuizQuestion";
 import QuizResults from "./QuizResults";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Loader2 } from "lucide-react";
-import type { QuizQuestionsTable } from "@/integrations/supabase/types/quiz";
+import { ArrowRight } from "lucide-react";
+
+// Mock data for quiz questions
+const mockQuestions = [
+  {
+    id: 1,
+    question: "Which component of the TABS-D Framework focuses on practical application and creating tangible solutions?",
+    options: ["Train", "Adapt", "Build", "Ship"],
+    correct_answer: "Build"
+  },
+  {
+    id: 2,
+    question: "What is the primary purpose of prompt engineering in AI development?",
+    options: [
+      "Writing code for AI models",
+      "Optimizing hardware performance",
+      "Crafting effective inputs for AI systems",
+      "Managing AI project timelines"
+    ],
+    correct_answer: "Crafting effective inputs for AI systems"
+  },
+  {
+    id: 3,
+    question: "In the context of AI implementation, what does the 'Ship' phase in TABS-D primarily ensure?",
+    options: [
+      "Physical product shipping",
+      "Code deployment",
+      "Quality assurance and deployment readiness",
+      "Marketing strategy"
+    ],
+    correct_answer: "Quality assurance and deployment readiness"
+  },
+  {
+    id: 4,
+    question: "Which of these is NOT a key focus area of the Masterclass in AI Automation (MAA)?",
+    options: [
+      "Workflow automation",
+      "Process optimization",
+      "Hardware manufacturing",
+      "Implementation strategies"
+    ],
+    correct_answer: "Hardware manufacturing"
+  },
+  {
+    id: 5,
+    question: "What is a primary benefit of the 'Adapt' phase in the TABS-D Framework?",
+    options: [
+      "Cost reduction",
+      "Maintaining agility in response to technological changes",
+      "Marketing improvement",
+      "Team building"
+    ],
+    correct_answer: "Maintaining agility in response to technological changes"
+  }
+];
 
 const PreAssessmentQuiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showResults, setShowResults] = useState(false);
 
-  const { data: questions, isLoading } = useQuery({
-    queryKey: ["quiz-questions"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("quiz_questions")
-        .select("*") as { data: QuizQuestionsTable['Row'][] | null, error: Error | null };
-      
-      if (error) throw error;
-      return data;
-    }
-  });
-
   const handleAnswer = (answer: string) => {
     setAnswers(prev => ({ ...prev, [currentQuestionIndex]: answer }));
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < (questions?.length || 0) - 1) {
+    if (currentQuestionIndex < mockQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
       setShowResults(true);
@@ -38,11 +77,10 @@ const PreAssessmentQuiz = () => {
   };
 
   const calculateScore = () => {
-    if (!questions) return 0;
-    const correctAnswers = questions.filter(
+    const correctAnswers = mockQuestions.filter(
       (q, idx) => answers[idx] === q.correct_answer
     ).length;
-    return Math.round((correctAnswers / questions.length) * 100);
+    return Math.round((correctAnswers / mockQuestions.length) * 100);
   };
 
   const getRecommendations = (score: number) => {
@@ -73,22 +111,6 @@ const PreAssessmentQuiz = () => {
     setShowResults(false);
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!questions?.length) {
-    return (
-      <Card className="p-6 text-center">
-        <p className="text-gray-600">No quiz questions available at the moment.</p>
-      </Card>
-    );
-  }
-
   if (showResults) {
     const score = calculateScore();
     return (
@@ -100,12 +122,12 @@ const PreAssessmentQuiz = () => {
     );
   }
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = mockQuestions[currentQuestionIndex];
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="text-sm text-gray-500 mb-4">
-        Question {currentQuestionIndex + 1} of {questions.length}
+        Question {currentQuestionIndex + 1} of {mockQuestions.length}
       </div>
       
       <QuizQuestion
@@ -121,7 +143,7 @@ const PreAssessmentQuiz = () => {
           disabled={!answers[currentQuestionIndex]}
           className="flex items-center"
         >
-          {currentQuestionIndex === questions.length - 1 ? "Finish" : "Next"}
+          {currentQuestionIndex === mockQuestions.length - 1 ? "Finish" : "Next"}
           <ArrowRight className="ml-2 w-4 h-4" />
         </Button>
       </div>
