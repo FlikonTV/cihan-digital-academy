@@ -64,18 +64,40 @@ const CorporateTraining = () => {
 
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700">Course of Interest</label>
-                  <Select value={selectedCourse} onValueChange={setSelectedCourse}>
-                    <SelectTrigger className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-gray-50/50">
-                      <SelectValue placeholder="Select a course" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {courses.map((course) => (
-                        <SelectItem key={course} value={course}>
-                          {course}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="relative">
+                    <Select value={selectedCourse} onValueChange={setSelectedCourse}>
+                      <SelectTrigger className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors bg-gray-50/50 hover:bg-gray-100/50">
+                        <SelectValue 
+                          placeholder="Select a course" 
+                          className="text-gray-500 placeholder:text-gray-400"
+                        />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[300px] overflow-y-auto">
+                        <div className="px-2 py-2 text-sm text-gray-500 bg-gray-50">
+                          Select from our available courses
+                        </div>
+                        {courses.map((course) => (
+                          <SelectItem 
+                            key={course} 
+                            value={course}
+                            className="py-3 px-4 cursor-pointer hover:bg-primary/5 focus:bg-primary/5 rounded-md transition-colors"
+                          >
+                            <span className="font-medium text-gray-700">{course}</span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
+                  {selectedCourse && (
+                    <p className="text-sm text-primary mt-2 animate-fade-in">
+                      Selected: {selectedCourse}
+                    </p>
+                  )}
                 </div>
                 
                 <div className="space-y-2">
