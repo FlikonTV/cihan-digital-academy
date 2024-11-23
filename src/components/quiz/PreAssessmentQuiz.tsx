@@ -1,126 +1,26 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { useQuizState, mockQuestions } from "./hooks/useQuizState";
+import { useQuizProctoring } from "./hooks/useQuizProctoring";
 import QuizQuestion from "./QuizQuestion";
 import QuizResults from "./QuizResults";
 import WebcamMonitor from "./WebcamMonitor";
 import ActivityMonitor from "./ActivityMonitor";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 
-// Mock data for quiz questions
-const mockQuestions = [
-  {
-    id: 1,
-    question: "Which component of the TABS-D Framework focuses on practical application and creating tangible solutions?",
-    options: ["Train", "Adapt", "Build", "Ship"],
-    correct_answer: "Build"
-  },
-  {
-    id: 2,
-    question: "What is the primary purpose of prompt engineering in AI development?",
-    options: [
-      "Writing code for AI models",
-      "Optimizing hardware performance",
-      "Crafting effective inputs for AI systems",
-      "Managing AI project timelines"
-    ],
-    correct_answer: "Crafting effective inputs for AI systems"
-  },
-  {
-    id: 3,
-    question: "In the context of AI implementation, what does the 'Ship' phase in TABS-D primarily ensure?",
-    options: [
-      "Physical product shipping",
-      "Code deployment",
-      "Quality assurance and deployment readiness",
-      "Marketing strategy"
-    ],
-    correct_answer: "Quality assurance and deployment readiness"
-  },
-  {
-    id: 4,
-    question: "Which of these is NOT a key focus area of the Masterclass in AI Automation (MAA)?",
-    options: [
-      "Workflow automation",
-      "Process optimization",
-      "Hardware manufacturing",
-      "Implementation strategies"
-    ],
-    correct_answer: "Hardware manufacturing"
-  },
-  {
-    id: 5,
-    question: "What is a primary benefit of the 'Adapt' phase in the TABS-D Framework?",
-    options: [
-      "Cost reduction",
-      "Maintaining agility in response to technological changes",
-      "Marketing improvement",
-      "Team building"
-    ],
-    correct_answer: "Maintaining agility in response to technological changes"
-  }
-];
-
 const PreAssessmentQuiz = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [showResults, setShowResults] = useState(false);
-  const [quizAttemptId] = useState(uuidv4());
-  const [suspiciousActivities, setSuspiciousActivities] = useState<string[]>([]);
-  const { toast } = useToast();
-  const navigate = useNavigate();
+  const {
+    currentQuestionIndex,
+    answers,
+    showResults,
+    quizAttemptId,
+    suspiciousActivities,
+    handleAnswer,
+    handleNext,
+    handleRetake,
+    addSuspiciousActivity,
+  } = useQuizState();
 
-  const handleSuspiciousActivity = (activity: string) => {
-    setSuspiciousActivities(prev => [...prev, activity]);
-    toast({
-      variant: "destructive",
-      title: "Warning",
-      description: "Suspicious activity detected. This will be recorded.",
-    });
-  };
-
-  const handlePhotoCapture = async (photoBlob: Blob) => {
-    try {
-      const photoPath = `quiz-photos/${quizAttemptId}.jpg`;
-      const { error: uploadError } = await supabase.storage
-        .from('quiz-photos')
-        .upload(photoPath, photoBlob);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('quiz-photos')
-        .getPublicUrl(photoPath);
-
-      await supabase.from('quiz_proctoring_data').insert({
-        quiz_attempt_id: quizAttemptId,
-        verification_photo_url: publicUrl,
-        suspicious_activities: suspiciousActivities
-      });
-    } catch (error) {
-      console.error('Error saving verification photo:', error);
-    }
-  };
-
-  const handleAnswer = (answer: string) => {
-    setAnswers(prev => ({ ...prev, [currentQuestionIndex]: answer }));
-  };
-
-  const handleNext = () => {
-    if (currentQuestionIndex < mockQuestions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-    } else {
-      setShowResults(true);
-      // Save final proctoring data
-      supabase.from('quiz_proctoring_data')
-        .update({ suspicious_activities: suspiciousActivities })
-        .eq('quiz_attempt_id', quizAttemptId);
-    }
-  };
+  const { handlePhotoCapture } = useQuizProctoring(quizAttemptId, addSuspiciousActivity);
 
   const calculateScore = () => {
     const correctAnswers = mockQuestions.filter(
@@ -151,12 +51,6 @@ const PreAssessmentQuiz = () => {
     ];
   };
 
-  const handleRetake = () => {
-    setCurrentQuestionIndex(0);
-    setAnswers({});
-    setShowResults(false);
-  };
-
   if (showResults) {
     const score = calculateScore();
     return (
@@ -173,10 +67,10 @@ const PreAssessmentQuiz = () => {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <WebcamMonitor 
-        onSuspiciousActivity={handleSuspiciousActivity}
+        onSuspiciousActivity={addSuspiciousActivity}
         onPhotoCapture={handlePhotoCapture}
       />
-      <ActivityMonitor onSuspiciousActivity={handleSuspiciousActivity} />
+      <ActivityMonitor onSuspiciousActivity={addSuspiciousActivity} />
       
       <div className="text-sm text-gray-500 mb-4">
         Question {currentQuestionIndex + 1} of {mockQuestions.length}
