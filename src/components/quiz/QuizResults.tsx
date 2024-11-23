@@ -1,15 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Trophy, BookOpen } from "lucide-react";
+import { Trophy, BookOpen, Check, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { mockQuestions } from "./hooks/useQuizState";
 
 interface QuizResultsProps {
   score: number;
   recommendations: string[];
   onRetake: () => void;
+  answers: Record<number, string>;
 }
 
-const QuizResults = ({ score, recommendations, onRetake }: QuizResultsProps) => {
+const QuizResults = ({ score, recommendations, onRetake, answers }: QuizResultsProps) => {
   const navigate = useNavigate();
   
   const getMessage = (score: number) => {
@@ -34,6 +36,34 @@ const QuizResults = ({ score, recommendations, onRetake }: QuizResultsProps) => 
         <p className="text-4xl font-bold text-primary mb-4">{score}%</p>
         <p className="text-lg text-gray-600 mb-2">{getMessage(score)}</p>
         <p className="text-md text-gray-500">Level: {getLevel(score)}</p>
+      </div>
+
+      <div className="mb-8">
+        <h3 className="text-xl font-semibold mb-4">Review Your Answers</h3>
+        <div className="space-y-4">
+          {mockQuestions.map((question, index) => (
+            <div key={index} className="p-4 bg-muted/50 rounded-lg">
+              <div className="flex items-start gap-3">
+                <div className="mt-1">
+                  {answers[index] === question.correct_answer ? (
+                    <Check className="w-5 h-5 text-green-500" />
+                  ) : (
+                    <X className="w-5 h-5 text-red-500" />
+                  )}
+                </div>
+                <div>
+                  <p className="font-medium mb-2">{question.question}</p>
+                  <p className="text-sm text-gray-600">Your answer: {answers[index]}</p>
+                  {answers[index] !== question.correct_answer && (
+                    <p className="text-sm text-green-600 mt-1">
+                      Correct answer: {question.correct_answer}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="mb-8">

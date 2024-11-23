@@ -58,6 +58,7 @@ const PreAssessmentQuiz = () => {
         score={score}
         recommendations={getRecommendations(score)}
         onRetake={handleRetake}
+        answers={answers}
       />
     );
   }

@@ -65,53 +65,58 @@ export const useQuizState = () => {
 const mockQuestions = [
   {
     id: 1,
-    question: "Which component of the TABS-D Framework focuses on practical application and creating tangible solutions?",
-    options: ["Train", "Adapt", "Build", "Ship"],
-    correct_answer: "Build"
+    question: "What is Artificial Intelligence (AI)?",
+    options: [
+      "A type of computer hardware",
+      "Systems that can mimic human intelligence",
+      "A programming language",
+      "A type of internet connection"
+    ],
+    correct_answer: "Systems that can mimic human intelligence"
   },
   {
     id: 2,
-    question: "What is the primary purpose of prompt engineering in AI development?",
+    question: "Which of these is an example of AI in everyday life?",
     options: [
-      "Writing code for AI models",
-      "Optimizing hardware performance",
-      "Crafting effective inputs for AI systems",
-      "Managing AI project timelines"
+      "Using a calculator",
+      "Voice assistants like Siri or Alexa",
+      "Playing a DVD",
+      "Using a microwave"
     ],
-    correct_answer: "Crafting effective inputs for AI systems"
+    correct_answer: "Voice assistants like Siri or Alexa"
   },
   {
     id: 3,
-    question: "In the context of AI implementation, what does the 'Ship' phase in TABS-D primarily ensure?",
+    question: "What is machine learning?",
     options: [
-      "Physical product shipping",
-      "Code deployment",
-      "Quality assurance and deployment readiness",
-      "Marketing strategy"
+      "Teaching robots to walk",
+      "A way for computers to learn from data without explicit programming",
+      "Learning how to build computers",
+      "A type of computer game"
     ],
-    correct_answer: "Quality assurance and deployment readiness"
+    correct_answer: "A way for computers to learn from data without explicit programming"
   },
   {
     id: 4,
-    question: "Which of these is NOT a key focus area of the Masterclass in AI Automation (MAA)?",
+    question: "What is the main goal of AI?",
     options: [
-      "Workflow automation",
-      "Process optimization",
-      "Hardware manufacturing",
-      "Implementation strategies"
+      "To replace all human jobs",
+      "To make computers faster",
+      "To solve complex problems and assist humans",
+      "To create video games"
     ],
-    correct_answer: "Hardware manufacturing"
+    correct_answer: "To solve complex problems and assist humans"
   },
   {
     id: 5,
-    question: "What is a primary benefit of the 'Adapt' phase in the TABS-D Framework?",
+    question: "Which field does NOT commonly use AI?",
     options: [
-      "Cost reduction",
-      "Maintaining agility in response to technological changes",
-      "Marketing improvement",
-      "Team building"
+      "Healthcare",
+      "Basic arithmetic calculations",
+      "Customer service",
+      "Transportation"
     ],
-    correct_answer: "Maintaining agility in response to technological changes"
+    correct_answer: "Basic arithmetic calculations"
   }
 ];
 
