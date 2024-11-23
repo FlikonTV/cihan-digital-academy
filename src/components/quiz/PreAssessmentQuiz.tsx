@@ -5,9 +5,16 @@ import QuizResults from "./QuizResults";
 import WebcamMonitor from "./WebcamMonitor";
 import ActivityMonitor from "./ActivityMonitor";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { useState } from "react";
 
 const PreAssessmentQuiz = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const {
     currentQuestionIndex,
     answers,
@@ -66,35 +73,56 @@ const PreAssessmentQuiz = () => {
   const currentQuestion = mockQuestions[currentQuestionIndex];
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 quiz-content">
-      <WebcamMonitor 
-        onSuspiciousActivity={addSuspiciousActivity}
-        onPhotoCapture={handlePhotoCapture}
-      />
-      <ActivityMonitor onSuspiciousActivity={addSuspiciousActivity} />
-      
-      <div className="text-sm text-gray-500 mb-4">
-        Question {currentQuestionIndex + 1} of {mockQuestions.length}
+    <Collapsible
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      className="max-w-2xl mx-auto space-y-2"
+    >
+      <div className="flex items-center justify-between px-4 py-3 bg-muted rounded-lg">
+        <h3 className="text-lg font-semibold">AI Knowledge Assessment Quiz</h3>
+        <CollapsibleTrigger asChild>
+          <Button variant="ghost" size="sm" className="w-9 p-0">
+            <ChevronDown
+              className="h-4 w-4 transition-transform duration-200"
+              style={{
+                transform: isOpen ? "rotate(-180deg)" : "rotate(0deg)",
+              }}
+            />
+            <span className="sr-only">Toggle quiz</span>
+          </Button>
+        </CollapsibleTrigger>
       </div>
-      
-      <QuizQuestion
-        question={currentQuestion.question}
-        options={currentQuestion.options}
-        onAnswer={handleAnswer}
-        currentAnswer={answers[currentQuestionIndex]}
-      />
 
-      <div className="flex justify-end">
-        <Button
-          onClick={handleNext}
-          disabled={!answers[currentQuestionIndex]}
-          className="flex items-center"
-        >
-          {currentQuestionIndex === mockQuestions.length - 1 ? "Finish" : "Next"}
-          <ArrowRight className="ml-2 w-4 h-4" />
-        </Button>
-      </div>
-    </div>
+      <CollapsibleContent className="space-y-6 quiz-content">
+        <WebcamMonitor 
+          onSuspiciousActivity={addSuspiciousActivity}
+          onPhotoCapture={handlePhotoCapture}
+        />
+        <ActivityMonitor onSuspiciousActivity={addSuspiciousActivity} />
+        
+        <div className="text-sm text-gray-500 mb-4">
+          Question {currentQuestionIndex + 1} of {mockQuestions.length}
+        </div>
+        
+        <QuizQuestion
+          question={currentQuestion.question}
+          options={currentQuestion.options}
+          onAnswer={handleAnswer}
+          currentAnswer={answers[currentQuestionIndex]}
+        />
+
+        <div className="flex justify-end">
+          <Button
+            onClick={handleNext}
+            disabled={!answers[currentQuestionIndex]}
+            className="flex items-center"
+          >
+            {currentQuestionIndex === mockQuestions.length - 1 ? "Finish" : "Next"}
+            <ArrowRight className="ml-2 w-4 h-4" />
+          </Button>
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 };
 
