@@ -65,7 +65,7 @@ const PreAssessmentQuiz = () => {
   const currentQuestion = mockQuestions[currentQuestionIndex];
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-6 quiz-content">
       <WebcamMonitor 
         onSuspiciousActivity={addSuspiciousActivity}
         onPhotoCapture={handlePhotoCapture}
