@@ -29,9 +29,19 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
     };
 
     try {
-      const { error } = await supabase.from("registrations").insert([data]);
+      // Insert into database
+      const { error: dbError } = await supabase.from("registrations").insert([data]);
+      if (dbError) throw dbError;
+
+      // Send email notification
+      const { error: emailError } = await supabase.functions.invoke('send-notification', {
+        body: { type: 'registration', data }
+      });
       
-      if (error) throw error;
+      if (emailError) {
+        console.error('Error sending email notification:', emailError);
+        // Don't throw here - we still want to show success for the registration
+      }
 
       toast({
         title: "Registration Successful!",

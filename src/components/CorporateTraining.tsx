@@ -53,8 +53,16 @@ const CorporateTraining = () => {
   const onSubmit = async (data: FormData) => {
     try {
       setIsSubmitting(true);
-      // Here you would typically make an API call
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+      
+      // Send email notification
+      const { error: emailError } = await supabase.functions.invoke('send-notification', {
+        body: { type: 'corporate', data }
+      });
+      
+      if (emailError) {
+        console.error('Error sending email notification:', emailError);
+        throw emailError;
+      }
       
       toast({
         title: "Request Submitted",
