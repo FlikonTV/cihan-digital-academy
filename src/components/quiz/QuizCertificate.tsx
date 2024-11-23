@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, Award } from "lucide-react";
 import html2canvas from "html2canvas";
 
 interface QuizCertificateProps {
@@ -30,20 +30,22 @@ const QuizCertificate = ({
   };
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 animate-fade-up">
       <Card 
         id="quiz-certificate" 
-        className="p-12 bg-gradient-to-br from-purple-50 via-white to-purple-50 border-2 border-primary/20 relative overflow-hidden"
+        className="p-12 bg-gradient-to-br from-purple-50 via-white to-purple-50 border-2 border-primary/20 relative overflow-hidden shadow-lg"
       >
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjwvZz48L3N2Zz4=')] bg-repeat opacity-20" />
         </div>
 
-        <div className="relative text-center space-y-6">
+        {/* Certificate Content */}
+        <div className="relative text-center space-y-8">
           {/* Header */}
-          <div className="space-y-2">
-            <div className="text-primary font-bold text-3xl mb-2">
+          <div className="space-y-3">
+            <Award className="w-16 h-16 text-primary mx-auto animate-pulse" />
+            <div className="text-primary font-bold text-3xl">
               Cihan Digital Academy
             </div>
             <div className="w-32 h-1 bg-primary mx-auto rounded-full" />
@@ -53,7 +55,7 @@ const QuizCertificate = ({
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-gray-800">Certificate of Completion</h2>
             <p className="text-gray-600 italic">This is to certify that</p>
-            <p className="text-2xl font-bold text-gray-800 border-b-2 border-primary/20 pb-2 mx-auto inline-block">
+            <p className="text-2xl font-bold text-gray-800 border-b-2 border-primary/20 pb-2 mx-auto inline-block px-8">
               {userName}
             </p>
           </div>
@@ -63,7 +65,9 @@ const QuizCertificate = ({
             <p className="text-gray-600">has successfully completed the</p>
             <p className="text-xl font-semibold text-gray-800">AI Knowledge Assessment</p>
             <p className="text-gray-600">with a score of</p>
-            <p className="text-4xl font-bold text-primary">{score}%</p>
+            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10 mb-4">
+              <p className="text-4xl font-bold text-primary">{score}%</p>
+            </div>
           </div>
 
           {/* Date and Signature */}
@@ -86,7 +90,10 @@ const QuizCertificate = ({
       </Card>
 
       <div className="mt-6 flex justify-center">
-        <Button onClick={handleDownload} className="flex items-center gap-2">
+        <Button 
+          onClick={handleDownload} 
+          className="flex items-center gap-2 shadow-lg hover:shadow-xl transition-all"
+        >
           <Download className="w-4 h-4" />
           Download Certificate
         </Button>
