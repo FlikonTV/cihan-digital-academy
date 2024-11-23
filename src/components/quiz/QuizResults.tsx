@@ -14,6 +14,7 @@ interface QuizResultsProps {
     name: string;
     email: string;
   };
+  participantName?: string;
 }
 
 const QuizResults = ({ 
@@ -21,7 +22,8 @@ const QuizResults = ({
   recommendations, 
   onRetake, 
   answers,
-  assessorInfo 
+  assessorInfo,
+  participantName = "Participant"
 }: QuizResultsProps) => {
   const navigate = useNavigate();
   
@@ -94,6 +96,7 @@ const QuizResults = ({
       {score >= 60 && (
         <QuizCertificate 
           score={score}
+          userName={participantName}
           date={new Date().toLocaleDateString()}
           assessorName={assessorInfo?.name}
           assessorEmail={assessorInfo?.email}

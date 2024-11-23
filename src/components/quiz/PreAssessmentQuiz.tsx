@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuizState, mockQuestions } from "./hooks/useQuizState";
 import { useQuizProctoring } from "./hooks/useQuizProctoring";
 import QuizQuestion from "./QuizQuestion";
@@ -11,9 +12,10 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-// Default assessor information - in a real app, this might come from environment variables or a configuration file
+// Default assessor information
 const DEFAULT_ASSESSOR = {
   name: "Celestine Achi",
   email: "training@cihanmediacomms.com"
@@ -22,6 +24,8 @@ const DEFAULT_ASSESSOR = {
 const PreAssessmentQuiz = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [participantName, setParticipantName] = useState("");
+  const [hasStarted, setHasStarted] = useState(false);
   
   const {
     currentQuestionIndex,
@@ -76,6 +80,11 @@ const PreAssessmentQuiz = () => {
     handleNext();
   };
 
+  const handleStart = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setHasStarted(true);
+  };
+
   if (showResults) {
     const score = calculateScore();
     return (
@@ -85,7 +94,30 @@ const PreAssessmentQuiz = () => {
         onRetake={handleRetake}
         answers={answers}
         assessorInfo={DEFAULT_ASSESSOR}
+        participantName={participantName}
       />
+    );
+  }
+
+  if (!hasStarted) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-sm">
+        <h3 className="text-lg font-semibold mb-4">Before we begin...</h3>
+        <form onSubmit={handleStart} className="space-y-4">
+          <div>
+            <Label htmlFor="participantName">Please enter your full name</Label>
+            <Input
+              id="participantName"
+              value={participantName}
+              onChange={(e) => setParticipantName(e.target.value)}
+              placeholder="Your full name"
+              required
+              className="mt-1"
+            />
+          </div>
+          <Button type="submit">Start Quiz</Button>
+        </form>
+      </div>
     );
   }
 
