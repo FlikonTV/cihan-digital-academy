@@ -1,3 +1,9 @@
+import { ContentAnalysisRequestsTable } from './content-analysis';
+import { ProfilesTable } from './profiles';
+import { ProjectCollaboratorsTable } from './project';
+import { RegistrationsTable } from './registrations';
+import { QuizQuestionsTable } from './quiz';
+
 export type Json =
   | string
   | number

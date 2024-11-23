@@ -6,6 +6,7 @@ import QuizResults from "./QuizResults";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Loader2 } from "lucide-react";
+import type { QuizQuestionsTable } from "@/integrations/supabase/types/quiz";
 
 const PreAssessmentQuiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -17,7 +18,7 @@ const PreAssessmentQuiz = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("quiz_questions")
-        .select("*");
+        .select("*") as { data: QuizQuestionsTable['Row'][] | null, error: Error | null };
       
       if (error) throw error;
       return data;
