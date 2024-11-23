@@ -87,30 +87,37 @@ const FeaturedCourses = () => {
           {courses.map((course, index) => (
             <div 
               key={index}
-              className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 animate-fade-up"
+              className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 animate-fade-up transform hover:-translate-y-1"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <img 
-                src={course.image} 
-                alt={course.title}
-                className="w-full h-48 object-cover"
-              />
+              <div className="relative overflow-hidden">
+                <img 
+                  src={course.image} 
+                  alt={course.title}
+                  className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <Badge variant="secondary">{course.level}</Badge>
+                  <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20">
+                    {course.level}
+                  </Badge>
                   <div className="flex items-center text-gray-500">
                     <Clock className="w-4 h-4 mr-1" />
                     <span className="text-sm">{course.duration}</span>
                   </div>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{course.title}</h3>
-                <p className="text-gray-600 mb-4">{course.description}</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300">
+                  {course.title}
+                </h3>
+                <p className="text-gray-600 mb-4 line-clamp-2">{course.description}</p>
                 <div className="space-y-4">
                   <div className="text-sm text-gray-600">
                     <strong>Next Sessions:</strong>
                     <ul className="mt-2 space-y-1">
                       {course.dates.map((date, idx) => (
-                        <li key={idx} className="flex justify-between items-center">
+                        <li key={idx} className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
                           <span>{new Date(date).toLocaleDateString()}</span>
                           <button
                             onClick={() => setSelectedCourse({
@@ -118,7 +125,7 @@ const FeaturedCourses = () => {
                               date: date,
                               price: course.price
                             })}
-                            className="text-primary hover:text-secondary"
+                            className="text-primary hover:text-secondary font-medium px-3 py-1 rounded-md hover:bg-primary/10 transition-all duration-300"
                           >
                             Register
                           </button>
@@ -126,7 +133,12 @@ const FeaturedCourses = () => {
                       ))}
                     </ul>
                   </div>
-                  <p className="text-lg font-semibold text-gray-900">{course.price}</p>
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <p className="text-lg font-semibold text-gray-900">{course.price}</p>
+                    <Badge variant="outline" className="bg-muted">
+                      {course.duration}
+                    </Badge>
+                  </div>
                 </div>
               </div>
             </div>
