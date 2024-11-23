@@ -1,6 +1,28 @@
 import { Building2, Mail, Phone } from "lucide-react";
+import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const CorporateTraining = () => {
+  const [selectedCourse, setSelectedCourse] = useState<string>("");
+
+  const courses = [
+    "Masterclass in Artificial Intelligence (MAI)",
+    "Executive Masterclass in AI for Management Insights",
+    "Masterclass in Prompt Engineering (MPE)",
+    "Masterclass in AI Automation (MAA)",
+    "Masterclass in Artificial Intelligence Coding (MAIC)",
+    "Masterclass in Digital Communication and Data-Driven Analytics (MDCDA)",
+    "Certificate Program in Responsible AI Implementation",
+    "AI for Digital Content Creation and SEO",
+    "AI-Driven Data Analytics and Business Intelligence"
+  ];
+
   return (
     <section id="corporate" className="py-20">
       <div className="container mx-auto px-4">
@@ -36,6 +58,22 @@ const CorporateTraining = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
                     placeholder="Enter your email"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Course of Interest</label>
+                  <Select value={selectedCourse} onValueChange={setSelectedCourse}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a course" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {courses.map((course) => (
+                        <SelectItem key={course} value={course}>
+                          {course}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 
                 <div>
