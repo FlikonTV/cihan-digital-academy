@@ -21,6 +21,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const { type, data }: EmailData = await req.json();
+    console.log('Received email request:', { type, data });
 
     let subject, html;
     if (type === 'registration') {
@@ -47,6 +48,8 @@ const handler = async (req: Request): Promise<Response> => {
       `;
     }
 
+    console.log('Sending email with:', { subject });
+
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -54,7 +57,7 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Cihan Digital Academy <notifications@cihandigitalacademy.live>",
+        from: "Cihan Digital Academy <cdatraining@cihanmediacomms.com>",
         to: ["cdatraining@cihanmediacomms.com"],
         subject,
         html,
@@ -74,15 +77,12 @@ const handler = async (req: Request): Promise<Response> => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
-  } catch (error) {
-    console.error("Error sending notification:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to send notification" }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 500,
-      }
-    );
+  } catch (error: any) {
+    console.error("Error in sendemail function:", error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 };
 
