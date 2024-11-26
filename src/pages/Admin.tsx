@@ -101,12 +101,12 @@ const Admin = () => {
                 </TableCell>
                 <TableCell>{registration.course_price}</TableCell>
                 <TableCell>
-                  <Badge variant={registration.status === "pending" ? "secondary" : "success"}>
+                  <Badge variant={registration.status === "pending" ? "secondary" : "default"}>
                     {registration.status}
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={registration.payment_status === "unpaid" ? "destructive" : "success"}>
+                  <Badge variant={registration.payment_status === "unpaid" ? "destructive" : "default"}>
                     {registration.payment_status}
                   </Badge>
                 </TableCell>
