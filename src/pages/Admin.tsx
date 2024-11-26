@@ -12,52 +12,65 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 
 const Admin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [password, setPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Check if user is admin
   useEffect(() => {
     const checkAdmin = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        navigate("/");
-        return;
-      }
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+          toast({
+            title: "Authentication Required",
+            description: "Please sign in to access the admin panel.",
+            variant: "destructive",
+          });
+          navigate("/");
+          return;
+        }
 
-      if (user.email === "cdatraining@cihanmediacomms.com") {
-        setIsAuthenticated(false); // Require password even if email matches
-      } else {
+        // Check if user is admin by querying the profiles table
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', user.id)
+          .single();
+
+        if (profile?.is_admin) {
+          setIsAdmin(true);
+        } else {
+          toast({
+            title: "Unauthorized",
+            description: "You don't have admin access.",
+            variant: "destructive",
+          });
+          navigate("/");
+        }
+      } catch (error) {
+        console.error('Error checking admin status:', error);
         toast({
-          title: "Unauthorized",
-          description: "You don't have access to this page.",
+          title: "Error",
+          description: "Failed to verify admin access.",
           variant: "destructive",
         });
         navigate("/");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     checkAdmin();
   }, [navigate, toast]);
 
-  const handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (password === "test@123") {
-      setIsAuthenticated(true);
-    } else {
-      toast({
-        title: "Invalid Password",
-        description: "Please enter the correct password.",
-        variant: "destructive",
-      });
-    }
-  };
-
   // Fetch registrations
-  const { data: registrations, isLoading } = useQuery({
+  const { data: registrations, isLoading: isLoadingRegistrations } = useQuery({
     queryKey: ["registrations"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -68,9 +81,15 @@ const Admin = () => {
       if (error) throw error;
       return data;
     },
+    enabled: isAdmin, // Only fetch if user is admin
   });
 
-  if (isLoading) {
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
+
+  if (isLoading || isLoadingRegistrations) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -78,40 +97,18 @@ const Admin = () => {
     );
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-center text-gray-900">Admin Login</h2>
-          <form onSubmit={handlePasswordSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-secondary transition-colors"
-            >
-              Login
-            </button>
-          </form>
-        </div>
-      </div>
-    );
+  if (!isAdmin) {
+    return null;
   }
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <Button onClick={handleSignOut} variant="outline">
+          Sign Out
+        </Button>
+      </div>
       
       <div className="rounded-md border">
         <Table>
