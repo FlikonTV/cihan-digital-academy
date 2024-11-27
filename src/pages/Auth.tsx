@@ -13,14 +13,17 @@ const AuthPage = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError) throw userError;
+
         if (user) {
-          // Check if user is admin
-          const { data: profile } = await supabase
+          const { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('is_admin')
             .eq('id', user.id)
             .single();
+            
+          if (profileError) throw profileError;
 
           if (profile?.is_admin) {
             navigate("/admin");
@@ -45,11 +48,13 @@ const AuthPage = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN" && session?.user) {
         try {
-          const { data: profile } = await supabase
+          const { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('is_admin')
             .eq('id', session.user.id)
             .single();
+
+          if (profileError) throw profileError;
 
           if (profile?.is_admin) {
             navigate("/admin");
