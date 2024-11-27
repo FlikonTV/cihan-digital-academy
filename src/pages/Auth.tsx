@@ -13,8 +13,13 @@ const AuthPage = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        if (userError) throw userError;
+        const { data: { user }, error } = await supabase.auth.getUser();
+        
+        if (error) {
+          console.error('Auth error:', error);
+          setIsLoading(false);
+          return;
+        }
 
         if (user) {
           const { data: profile, error: profileError } = await supabase
@@ -22,8 +27,17 @@ const AuthPage = () => {
             .select('is_admin')
             .eq('id', user.id)
             .single();
-            
-          if (profileError) throw profileError;
+
+          if (profileError) {
+            console.error('Profile error:', profileError);
+            toast({
+              title: "Error",
+              description: "There was a problem checking your profile.",
+              variant: "destructive",
+            });
+            setIsLoading(false);
+            return;
+          }
 
           if (profile?.is_admin) {
             navigate("/admin");
@@ -32,10 +46,10 @@ const AuthPage = () => {
           }
         }
       } catch (error) {
-        console.error('Auth error:', error);
+        console.error('Unexpected error:', error);
         toast({
-          title: "Authentication Error",
-          description: "There was a problem checking your authentication status.",
+          title: "Error",
+          description: "An unexpected error occurred. Please try again.",
           variant: "destructive",
         });
       } finally {
@@ -54,7 +68,15 @@ const AuthPage = () => {
             .eq('id', session.user.id)
             .single();
 
-          if (profileError) throw profileError;
+          if (profileError) {
+            console.error('Profile error:', profileError);
+            toast({
+              title: "Error",
+              description: "There was a problem checking your profile.",
+              variant: "destructive",
+            });
+            return;
+          }
 
           if (profile?.is_admin) {
             navigate("/admin");
@@ -62,10 +84,10 @@ const AuthPage = () => {
             navigate("/");
           }
         } catch (error) {
-          console.error('Profile check error:', error);
+          console.error('Unexpected error:', error);
           toast({
             title: "Error",
-            description: "There was a problem checking your profile.",
+            description: "An unexpected error occurred. Please try again.",
             variant: "destructive",
           });
         }
