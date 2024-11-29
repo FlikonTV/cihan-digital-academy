@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Auth as SupabaseAuth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -11,11 +11,10 @@ const Auth = () => {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN") {
-        toast({
-          title: "Welcome!",
-          description: "You have successfully signed in.",
-        });
+        toast.success("Welcome! You have successfully signed in.");
         navigate("/");
+      } else if (event === "SIGNED_OUT") {
+        toast.info("You have been signed out.");
       }
     });
 
@@ -55,9 +54,17 @@ const Auth = () => {
               input: {
                 borderRadius: '0.375rem',
               },
+              message: {
+                color: 'red',
+                fontSize: '0.875rem',
+              }
             },
           }}
           providers={[]}
+          redirectTo={`${window.location.origin}/`}
+          magicLink={false}
+          showLinks={true}
+          view="sign_in"
           theme="default"
         />
       </div>
