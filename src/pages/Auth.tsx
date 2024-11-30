@@ -36,12 +36,6 @@ const Auth = () => {
           }
         }
         navigate("/");
-      } else if (event === "USER_ALREADY_EXISTS") {
-        toast({
-          title: "Account Exists",
-          description: "This email is already registered. Please sign in instead.",
-          variant: "default",
-        });
       }
     });
 
@@ -56,9 +50,6 @@ const Auth = () => {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Please sign in with your registered email
-          </p>
         </div>
         <div className="mt-8">
           <SupabaseAuth
@@ -75,15 +66,6 @@ const Auth = () => {
               },
             }}
             providers={[]}
-            onError={(error) => {
-              if (error.message.includes("User already registered")) {
-                toast({
-                  title: "Account Exists",
-                  description: "This email is already registered. Please sign in instead.",
-                  variant: "default",
-                });
-              }
-            }}
           />
         </div>
       </div>
