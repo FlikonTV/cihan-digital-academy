@@ -11,6 +11,11 @@ import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();
 
+const ADMIN_EMAILS = [
+  'cdatraining@cihanmediacomms.com',
+  'aiautomation@cihanmediacomms.com'
+];
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,49 +24,19 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const checkAdmin = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        console.log("Current user:", user); // Debug log
+        console.log("Current user:", user);
 
         if (!user) {
-          console.log("No user found, redirecting to auth"); // Debug log
+          console.log("No user found, redirecting to auth");
           setIsAdmin(false);
           setIsLoading(false);
           return;
         }
 
-        // First check if profile exists
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('is_admin')
-          .eq('id', user.id)
-          .single();
-
-        console.log("Profile data:", profile, "Error:", error); // Debug log
-
-        if (error) {
-          if (error.code === 'PGRST116') {
-            console.log("Profile doesn't exist, creating new profile"); // Debug log
-            const { data: newProfile, error: insertError } = await supabase
-              .from('profiles')
-              .insert([{ id: user.id, is_admin: false }])
-              .select('is_admin')
-              .single();
-
-            console.log("New profile created:", newProfile, "Error:", insertError); // Debug log
-
-            if (insertError) {
-              console.error('Error creating profile:', insertError);
-              setIsAdmin(false);
-            } else {
-              setIsAdmin(!!newProfile?.is_admin);
-            }
-          } else {
-            console.error('Error fetching profile:', error);
-            setIsAdmin(false);
-          }
-        } else {
-          console.log("Setting admin status to:", !!profile?.is_admin); // Debug log
-          setIsAdmin(!!profile?.is_admin);
-        }
+        // Check if user's email is in the ADMIN_EMAILS array
+        const userIsAdmin = ADMIN_EMAILS.includes(user.email || '');
+        console.log("Is admin?", userIsAdmin);
+        setIsAdmin(userIsAdmin);
         setIsLoading(false);
       } catch (error) {
         console.error('Error in checkAdmin:', error);
@@ -77,7 +52,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return <div>Loading...</div>;
   }
 
-  console.log("Final isAdmin value:", isAdmin); // Debug log
+  console.log("Final isAdmin value:", isAdmin);
   return isAdmin ? <>{children}</> : <Navigate to="/auth" />;
 };
 
@@ -88,7 +63,6 @@ const AuthHandler = () => {
   useEffect(() => {
     const code = new URLSearchParams(location.search).get('code');
     if (code) {
-      // If there's a code parameter, redirect to auth page with reset=true
       navigate('/auth?reset=true');
     }
   }, [location, navigate]);
