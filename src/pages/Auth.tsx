@@ -1,15 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Auth as SupabaseAuth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import PasswordReset from "@/components/PasswordReset";
 
 const ADMIN_EMAIL = "cdatraining@cihanmediacomms.com";
 
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
+  const [showReset, setShowReset] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -18,6 +21,15 @@ const Auth = () => {
         navigate("/");
       }
     };
+
+    // Check if we're returning from a password reset
+    const isReset = searchParams.get('reset');
+    if (isReset) {
+      toast({
+        title: "Password Reset",
+        description: "You can now set your new password.",
+      });
+    }
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN") {
@@ -65,32 +77,57 @@ const Auth = () => {
 
     checkAuth();
     return () => subscription.unsubscribe();
-  }, [navigate, toast]);
+  }, [navigate, toast, searchParams]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
+            {showReset ? "Reset Password" : "Sign in to your account"}
           </h2>
+          {!showReset && (
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Or{" "}
+              <button
+                onClick={() => setShowReset(true)}
+                className="font-medium text-primary hover:text-secondary"
+              >
+                reset your password
+              </button>
+            </p>
+          )}
+          {showReset && (
+            <p className="mt-2 text-center text-sm text-gray-600">
+              <button
+                onClick={() => setShowReset(false)}
+                className="font-medium text-primary hover:text-secondary"
+              >
+                Back to sign in
+              </button>
+            </p>
+          )}
         </div>
         <div className="mt-8">
-          <SupabaseAuth
-            supabaseClient={supabase}
-            appearance={{
-              theme: ThemeSupa,
-              variables: {
-                default: {
-                  colors: {
-                    brand: '#2563eb',
-                    brandAccent: '#1d4ed8',
+          {showReset ? (
+            <PasswordReset />
+          ) : (
+            <SupabaseAuth
+              supabaseClient={supabase}
+              appearance={{
+                theme: ThemeSupa,
+                variables: {
+                  default: {
+                    colors: {
+                      brand: '#2563eb',
+                      brandAccent: '#1d4ed8',
+                    },
                   },
                 },
-              },
-            }}
-            providers={[]}
-          />
+              }}
+              providers={[]}
+            />
+          )}
         </div>
       </div>
     </div>
