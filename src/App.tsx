@@ -19,7 +19,10 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const checkAdmin = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
+        console.log("Current user:", user); // Debug log
+
         if (!user) {
+          console.log("No user found, redirecting to auth"); // Debug log
           setIsAdmin(false);
           setIsLoading(false);
           return;
@@ -32,14 +35,18 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
           .eq('id', user.id)
           .single();
 
+        console.log("Profile data:", profile, "Error:", error); // Debug log
+
         if (error) {
-          // If profile doesn't exist, create it
           if (error.code === 'PGRST116') {
+            console.log("Profile doesn't exist, creating new profile"); // Debug log
             const { data: newProfile, error: insertError } = await supabase
               .from('profiles')
               .insert([{ id: user.id, is_admin: false }])
               .select('is_admin')
               .single();
+
+            console.log("New profile created:", newProfile, "Error:", insertError); // Debug log
 
             if (insertError) {
               console.error('Error creating profile:', insertError);
@@ -52,6 +59,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
             setIsAdmin(false);
           }
         } else {
+          console.log("Setting admin status to:", !!profile?.is_admin); // Debug log
           setIsAdmin(!!profile?.is_admin);
         }
         setIsLoading(false);
@@ -69,6 +77,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return <div>Loading...</div>;
   }
 
+  console.log("Final isAdmin value:", isAdmin); // Debug log
   return isAdmin ? <>{children}</> : <Navigate to="/auth" />;
 };
 
