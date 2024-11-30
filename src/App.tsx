@@ -17,21 +17,49 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          setIsAdmin(false);
+          setIsLoading(false);
+          return;
+        }
+
+        // First check if profile exists
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', user.id)
+          .single();
+
+        if (error) {
+          // If profile doesn't exist, create it
+          if (error.code === 'PGRST116') {
+            const { data: newProfile, error: insertError } = await supabase
+              .from('profiles')
+              .insert([{ id: user.id, is_admin: false }])
+              .select('is_admin')
+              .single();
+
+            if (insertError) {
+              console.error('Error creating profile:', insertError);
+              setIsAdmin(false);
+            } else {
+              setIsAdmin(!!newProfile?.is_admin);
+            }
+          } else {
+            console.error('Error fetching profile:', error);
+            setIsAdmin(false);
+          }
+        } else {
+          setIsAdmin(!!profile?.is_admin);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error in checkAdmin:', error);
         setIsAdmin(false);
         setIsLoading(false);
-        return;
       }
-
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('is_admin')
-        .eq('id', user.id)
-        .single();
-
-      setIsAdmin(!!profile?.is_admin);
-      setIsLoading(false);
     };
 
     checkAdmin();

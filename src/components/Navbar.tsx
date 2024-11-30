@@ -11,16 +11,37 @@ const Navbar = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setIsAuthenticated(true);
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('is_admin')
-          .eq('id', user.id)
-          .single();
-        setIsAdmin(!!profile?.is_admin);
-      } else {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          setIsAuthenticated(true);
+          const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('is_admin')
+            .eq('id', user.id)
+            .single();
+
+          if (error) {
+            if (error.code === 'PGRST116') {
+              const { data: newProfile } = await supabase
+                .from('profiles')
+                .insert([{ id: user.id, is_admin: false }])
+                .select('is_admin')
+                .single();
+              setIsAdmin(!!newProfile?.is_admin);
+            } else {
+              console.error('Error fetching profile:', error);
+              setIsAdmin(false);
+            }
+          } else {
+            setIsAdmin(!!profile?.is_admin);
+          }
+        } else {
+          setIsAuthenticated(false);
+          setIsAdmin(false);
+        }
+      } catch (error) {
+        console.error('Error in checkAuth:', error);
         setIsAuthenticated(false);
         setIsAdmin(false);
       }
