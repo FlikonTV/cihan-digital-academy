@@ -6,7 +6,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import PasswordReset from "@/components/PasswordReset";
 
-const ADMIN_EMAIL = "cdatraining@cihanmediacomms.com";
+const ADMIN_EMAILS = [
+  "cdatraining@cihanmediacomms.com",
+  "aiautomation@cihanmediacomms.com"
+];
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -56,11 +59,11 @@ const Auth = () => {
               .from("profiles")
               .insert([{
                 id: session.user.id,
-                is_admin: session.user.email === ADMIN_EMAIL
+                is_admin: ADMIN_EMAILS.includes(session.user.email || '')
               }]);
 
             if (profileError) throw profileError;
-          } else if (session.user.email === ADMIN_EMAIL && !existingProfile.is_admin) {
+          } else if (ADMIN_EMAILS.includes(session.user.email || '') && !existingProfile.is_admin) {
             // Update admin status if needed
             const { error: updateError } = await supabase
               .from("profiles")
