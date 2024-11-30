@@ -61,7 +61,7 @@ const Auth = () => {
             },
           }}
           providers={[]}
-          redirectTo={`${window.location.origin}/auth`}
+          redirectTo={`${window.location.origin}/`}
           magicLink={false}
           showLinks={true}
           view="sign_in"
