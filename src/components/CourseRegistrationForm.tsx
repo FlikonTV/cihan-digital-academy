@@ -26,11 +26,27 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
       course_title: courseTitle,
       course_date: courseDate,
       course_price: coursePrice,
+      status: 'pending',
+      payment_status: 'unpaid'
     };
 
     try {
+      // Validate required fields
+      if (!data.full_name || !data.email) {
+        throw new Error("Please fill in all required fields");
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        throw new Error("Please enter a valid email address");
+      }
+
       // Insert into database
-      const { error: dbError } = await supabase.from("registrations").insert([data]);
+      const { error: dbError } = await supabase
+        .from("registrations")
+        .insert([data]);
+
       if (dbError) throw dbError;
 
       // Send email notification
@@ -50,9 +66,10 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
 
       if (onClose) onClose();
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Please try again later.";
       toast({
         title: "Registration Failed",
-        description: "Please try again later.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

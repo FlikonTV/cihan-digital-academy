@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 
+const ADMIN_EMAIL = "cdatraining@cihanmediacomms.com";
+
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -19,23 +21,45 @@ const Auth = () => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN") {
-        // Check if the user is the admin email
-        if (session?.user?.email === "celestine.achi@gmail.com") {
-          // Update the profile to make them an admin
-          const { error } = await supabase
-            .from("profiles")
-            .update({ is_admin: true, full_name: "Celestine Achi" })
-            .eq("id", session.user.id);
+        if (!session?.user) return;
 
-          if (error) {
-            toast({
-              title: "Error",
-              description: "Failed to set admin privileges",
-              variant: "destructive",
-            });
+        try {
+          // Check if profile exists
+          const { data: existingProfile } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
+
+          if (!existingProfile) {
+            // Create profile if it doesn't exist
+            const { error: profileError } = await supabase
+              .from("profiles")
+              .insert([{
+                id: session.user.id,
+                is_admin: session.user.email === ADMIN_EMAIL
+              }]);
+
+            if (profileError) throw profileError;
+          } else if (session.user.email === ADMIN_EMAIL && !existingProfile.is_admin) {
+            // Update admin status if needed
+            const { error: updateError } = await supabase
+              .from("profiles")
+              .update({ is_admin: true })
+              .eq("id", session.user.id);
+
+            if (updateError) throw updateError;
           }
+
+          navigate("/");
+        } catch (error) {
+          console.error("Error setting up profile:", error);
+          toast({
+            title: "Error",
+            description: "There was a problem setting up your profile. Please try again.",
+            variant: "destructive",
+          });
         }
-        navigate("/");
       }
     });
 
