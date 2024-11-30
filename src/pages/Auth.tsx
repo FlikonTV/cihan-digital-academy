@@ -26,12 +26,19 @@ const Auth = () => {
     const isReset = searchParams.get('reset');
     if (isReset) {
       toast({
-        title: "Password Reset",
-        description: "You can now set your new password.",
+        title: "Set New Password",
+        description: "Please enter your new password below.",
       });
     }
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        toast({
+          title: "Password Reset",
+          description: "You can now set your new password.",
+        });
+      }
+      
       if (event === "SIGNED_IN") {
         if (!session?.user) return;
 
