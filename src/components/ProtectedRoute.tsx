@@ -15,22 +15,19 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const checkAdmin = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        console.log("Current user:", user);
-
+        
         if (!user) {
-          console.log("No user found, redirecting to auth");
           setIsAdmin(false);
           setIsLoading(false);
           return;
         }
 
         const userIsAdmin = ADMIN_EMAILS.includes(user.email || '');
-        console.log("Is admin?", userIsAdmin);
         setIsAdmin(userIsAdmin);
-        setIsLoading(false);
       } catch (error) {
         console.error('Error in checkAdmin:', error);
         setIsAdmin(false);
+      } finally {
         setIsLoading(false);
       }
     };
@@ -42,7 +39,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return <div>Loading...</div>;
   }
 
-  console.log("Final isAdmin value:", isAdmin);
   return isAdmin ? <>{children}</> : <Navigate to="/auth" />;
 };
 
