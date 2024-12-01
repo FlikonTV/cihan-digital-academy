@@ -1,65 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          setIsAuthenticated(true);
-          const { data: profile, error } = await supabase
-            .from('profiles')
-            .select('is_admin')
-            .eq('id', user.id)
-            .single();
-
-          if (error) {
-            if (error.code === 'PGRST116') {
-              const { data: newProfile } = await supabase
-                .from('profiles')
-                .insert([{ id: user.id, is_admin: false }])
-                .select('is_admin')
-                .single();
-              setIsAdmin(!!newProfile?.is_admin);
-            } else {
-              console.error('Error fetching profile:', error);
-              setIsAdmin(false);
-            }
-          } else {
-            setIsAdmin(!!profile?.is_admin);
-          }
-        } else {
-          setIsAuthenticated(false);
-          setIsAdmin(false);
-        }
-      } catch (error) {
-        console.error('Error in checkAuth:', error);
-        setIsAuthenticated(false);
-        setIsAdmin(false);
-      }
-    };
-
-    checkAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      checkAuth();
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate('/');
-  };
 
   const scrollToCourses = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -92,31 +35,6 @@ const Navbar = () => {
                 {item}
               </a>
             ))}
-            {isAuthenticated ? (
-              <>
-                {isAdmin && (
-                  <Link
-                    to="/admin"
-                    className="text-gray-700 hover:text-primary transition-colors duration-300 text-sm font-medium"
-                  >
-                    Admin
-                  </Link>
-                )}
-                <button
-                  onClick={handleSignOut}
-                  className="text-gray-700 hover:text-primary transition-colors duration-300 text-sm font-medium"
-                >
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/auth"
-                className="text-gray-700 hover:text-primary transition-colors duration-300 text-sm font-medium"
-              >
-                Sign In
-              </Link>
-            )}
             <a 
               href="#courses" 
               onClick={scrollToCourses}
@@ -150,36 +68,6 @@ const Navbar = () => {
                 {item}
               </a>
             ))}
-            {isAuthenticated ? (
-              <>
-                {isAdmin && (
-                  <Link
-                    to="/admin"
-                    className="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-primary/5 rounded-md transition-all duration-300 text-sm font-medium"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Admin
-                  </Link>
-                )}
-                <button
-                  onClick={() => {
-                    handleSignOut();
-                    setIsOpen(false);
-                  }}
-                  className="block w-full text-left px-3 py-2 text-gray-700 hover:text-primary hover:bg-primary/5 rounded-md transition-all duration-300 text-sm font-medium"
-                >
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/auth"
-                className="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-primary/5 rounded-md transition-all duration-300 text-sm font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                Sign In
-              </Link>
-            )}
             <a 
               href="#courses" 
               onClick={scrollToCourses}
