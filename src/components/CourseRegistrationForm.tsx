@@ -31,7 +31,7 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
     };
 
     try {
-      console.log('Attempting to insert registration data:', data);
+      console.log('Attempting to register course:', data);
 
       // Validate required fields
       if (!data.full_name || !data.email) {
@@ -44,29 +44,17 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
         throw new Error("Please enter a valid email address");
       }
 
-      // Insert into database
-      const { data: insertedData, error: dbError } = await supabase
-        .from("registrations")
-        .insert([data])
-        .select()
-        .single();
-
-      if (dbError) {
-        console.error('Database error:', dbError);
-        throw dbError;
-      }
-
-      console.log('Registration successful:', insertedData);
-
-      // Send email notification
-      const { error: emailError } = await supabase.functions.invoke('send-notification', {
-        body: { type: 'registration', data }
+      // Send to Airtable via Edge Function
+      const { data: result, error } = await supabase.functions.invoke('register-course', {
+        body: { data }
       });
-      
-      if (emailError) {
-        console.error('Error sending email notification:', emailError);
-        // Don't throw here - we still want to show success for the registration
+
+      if (error) {
+        console.error('Registration error:', error);
+        throw new Error(error.message);
       }
+
+      console.log('Registration successful:', result);
 
       toast({
         title: "Registration Successful!",
