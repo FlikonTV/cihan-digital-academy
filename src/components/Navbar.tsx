@@ -3,11 +3,6 @@ import { Menu, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Link, useNavigate } from "react-router-dom";
 
-const ADMIN_EMAILS = [
-  'cdatraining@cihanmediacomms.com',
-  'aiautomation@cihanmediacomms.com'
-];
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -20,7 +15,27 @@ const Navbar = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           setIsAuthenticated(true);
-          setIsAdmin(ADMIN_EMAILS.includes(user.email || ''));
+          const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('is_admin')
+            .eq('id', user.id)
+            .single();
+
+          if (error) {
+            if (error.code === 'PGRST116') {
+              const { data: newProfile } = await supabase
+                .from('profiles')
+                .insert([{ id: user.id, is_admin: false }])
+                .select('is_admin')
+                .single();
+              setIsAdmin(!!newProfile?.is_admin);
+            } else {
+              console.error('Error fetching profile:', error);
+              setIsAdmin(false);
+            }
+          } else {
+            setIsAdmin(!!profile?.is_admin);
+          }
         } else {
           setIsAuthenticated(false);
           setIsAdmin(false);

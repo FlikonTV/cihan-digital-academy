@@ -6,10 +6,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import PasswordReset from "@/components/PasswordReset";
 
-const ADMIN_EMAILS = [
-  "cdatraining@cihanmediacomms.com",
-  "aiautomation@cihanmediacomms.com"
-];
+const ADMIN_EMAIL = "cdatraining@cihanmediacomms.com";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -29,19 +26,12 @@ const Auth = () => {
     const isReset = searchParams.get('reset');
     if (isReset) {
       toast({
-        title: "Set New Password",
-        description: "Please enter your new password below.",
+        title: "Password Reset",
+        description: "You can now set your new password.",
       });
     }
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "PASSWORD_RECOVERY") {
-        toast({
-          title: "Password Reset",
-          description: "You can now set your new password.",
-        });
-      }
-      
       if (event === "SIGNED_IN") {
         if (!session?.user) return;
 
@@ -59,11 +49,11 @@ const Auth = () => {
               .from("profiles")
               .insert([{
                 id: session.user.id,
-                is_admin: ADMIN_EMAILS.includes(session.user.email || '')
+                is_admin: session.user.email === ADMIN_EMAIL
               }]);
 
             if (profileError) throw profileError;
-          } else if (ADMIN_EMAILS.includes(session.user.email || '') && !existingProfile.is_admin) {
+          } else if (session.user.email === ADMIN_EMAIL && !existingProfile.is_admin) {
             // Update admin status if needed
             const { error: updateError } = await supabase
               .from("profiles")

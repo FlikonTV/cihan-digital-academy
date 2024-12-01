@@ -31,8 +31,6 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
     };
 
     try {
-      console.log('Attempting to register course:', data);
-
       // Validate required fields
       if (!data.full_name || !data.email) {
         throw new Error("Please fill in all required fields");
@@ -44,17 +42,22 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
         throw new Error("Please enter a valid email address");
       }
 
-      // Send to Airtable via Edge Function
-      const { data: result, error } = await supabase.functions.invoke('register-course', {
-        body: { data }
+      // Insert into database
+      const { error: dbError } = await supabase
+        .from("registrations")
+        .insert([data]);
+
+      if (dbError) throw dbError;
+
+      // Send email notification
+      const { error: emailError } = await supabase.functions.invoke('send-notification', {
+        body: { type: 'registration', data }
       });
-
-      if (error) {
-        console.error('Registration error:', error);
-        throw new Error(error.message);
+      
+      if (emailError) {
+        console.error('Error sending email notification:', emailError);
+        // Don't throw here - we still want to show success for the registration
       }
-
-      console.log('Registration successful:', result);
 
       toast({
         title: "Registration Successful!",
@@ -63,8 +66,7 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
 
       if (onClose) onClose();
     } catch (error) {
-      console.error('Registration error:', error);
-      const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred. Please try again later.";
+      const errorMessage = error instanceof Error ? error.message : "Please try again later.";
       toast({
         title: "Registration Failed",
         description: errorMessage,
