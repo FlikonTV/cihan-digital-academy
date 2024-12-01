@@ -31,6 +31,8 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
     };
 
     try {
+      console.log('Attempting to insert registration data:', data);
+
       // Validate required fields
       if (!data.full_name || !data.email) {
         throw new Error("Please fill in all required fields");
@@ -43,11 +45,18 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
       }
 
       // Insert into database
-      const { error: dbError } = await supabase
+      const { data: insertedData, error: dbError } = await supabase
         .from("registrations")
-        .insert([data]);
+        .insert([data])
+        .select()
+        .single();
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error('Database error:', dbError);
+        throw dbError;
+      }
+
+      console.log('Registration successful:', insertedData);
 
       // Send email notification
       const { error: emailError } = await supabase.functions.invoke('send-notification', {
@@ -66,7 +75,8 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
 
       if (onClose) onClose();
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Please try again later.";
+      console.error('Registration error:', error);
+      const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred. Please try again later.";
       toast({
         title: "Registration Failed",
         description: errorMessage,
