@@ -43,6 +43,7 @@ export type Database = {
         Row: {
           full_name: string | null
           id: string
+          is_admin: boolean | null
           organization: string | null
           phone: string | null
           updated_at: string | null
@@ -50,6 +51,7 @@ export type Database = {
         Insert: {
           full_name?: string | null
           id: string
+          is_admin?: boolean | null
           organization?: string | null
           phone?: string | null
           updated_at?: string | null
@@ -57,6 +59,7 @@ export type Database = {
         Update: {
           full_name?: string | null
           id?: string
+          is_admin?: boolean | null
           organization?: string | null
           phone?: string | null
           updated_at?: string | null
