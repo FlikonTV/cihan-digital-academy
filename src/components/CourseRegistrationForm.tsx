@@ -33,12 +33,12 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
     
     try {
       // Insert into database
-      const { error: dbError } = await supabase.from("registrations").insert([{
+      const { error: dbError } = await supabase.from("registrations").insert({
         ...formData,
         course_title: courseTitle,
         course_date: courseDate,
         course_price: coursePrice,
-      }]);
+      });
       
       if (dbError) throw dbError;
 
