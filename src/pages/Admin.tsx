@@ -4,6 +4,7 @@ import { useSession } from "@supabase/auth-helpers-react";
 import RegistrationsTable from "@/components/admin/RegistrationsTable";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
 
 const Admin = () => {
   const session = useSession();
@@ -11,13 +12,18 @@ const Admin = () => {
 
   useEffect(() => {
     if (!session?.user?.email || session.user.email !== 'cdatraining@cihanmediacomms.com') {
-      navigate('/');
+      toast({
+        title: "Unauthorized Access",
+        description: "You do not have permission to access this page.",
+        variant: "destructive"
+      });
+      navigate('/login');
     }
   }, [session, navigate]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    navigate('/');
+    navigate('/login');
   };
 
   if (!session?.user?.email || session.user.email !== 'cdatraining@cihanmediacomms.com') {
