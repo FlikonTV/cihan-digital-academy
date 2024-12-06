@@ -1,6 +1,13 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { registrationFormSchema, type RegistrationFormData } from "@/lib/validations/registration";
+import { Loader2 } from "lucide-react";
 
 interface CourseRegistrationFormProps {
   courseTitle: string;
@@ -12,35 +19,44 @@ interface CourseRegistrationFormProps {
 const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose }: CourseRegistrationFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<RegistrationFormData>({
+    resolver: zodResolver(registrationFormSchema)
+  });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async (formData: RegistrationFormData) => {
     setIsSubmitting(true);
-
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      full_name: formData.get("full_name") as string,
-      email: formData.get("email") as string,
-      phone: formData.get("phone") as string,
-      organization: formData.get("organization") as string,
-      course_title: courseTitle,
-      course_date: courseDate,
-      course_price: coursePrice,
-    };
-
+    
     try {
       // Insert into database
-      const { error: dbError } = await supabase.from("registrations").insert([data]);
+      const { error: dbError } = await supabase.from("registrations").insert([{
+        ...formData,
+        course_title: courseTitle,
+        course_date: courseDate,
+        course_price: coursePrice,
+      }]);
+      
       if (dbError) throw dbError;
 
       // Send email notification
       const { error: emailError } = await supabase.functions.invoke('send-notification', {
-        body: { type: 'registration', data }
+        body: { 
+          type: 'registration', 
+          data: {
+            ...formData,
+            course_title: courseTitle,
+            course_date: courseDate,
+            course_price: coursePrice,
+          }
+        }
       });
       
       if (emailError) {
         console.error('Error sending email notification:', emailError);
-        // Don't throw here - we still want to show success for the registration
       }
 
       toast({
@@ -50,10 +66,11 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
 
       if (onClose) onClose();
     } catch (error) {
+      console.error('Registration error:', error);
       toast({
+        variant: "destructive",
         title: "Registration Failed",
         description: "Please try again later.",
-        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -61,54 +78,50 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="full_name" className="block text-sm font-medium text-gray-700">
-          Full Name *
-        </label>
-        <input
-          type="text"
-          name="full_name"
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="full_name">Full Name *</Label>
+        <Input
           id="full_name"
-          required
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          {...register("full_name")}
+          className={errors.full_name ? "border-destructive" : ""}
+          disabled={isSubmitting}
         />
+        {errors.full_name && (
+          <p className="text-sm text-destructive">{errors.full_name.message}</p>
+        )}
       </div>
 
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Email *
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="email">Email *</Label>
+        <Input
           type="email"
-          name="email"
           id="email"
-          required
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          {...register("email")}
+          className={errors.email ? "border-destructive" : ""}
+          disabled={isSubmitting}
         />
+        {errors.email && (
+          <p className="text-sm text-destructive">{errors.email.message}</p>
+        )}
       </div>
 
-      <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-          Phone Number
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="phone">Phone Number</Label>
+        <Input
           type="tel"
-          name="phone"
           id="phone"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          {...register("phone")}
+          disabled={isSubmitting}
         />
       </div>
 
-      <div>
-        <label htmlFor="organization" className="block text-sm font-medium text-gray-700">
-          Organization
-        </label>
-        <input
-          type="text"
-          name="organization"
+      <div className="space-y-2">
+        <Label htmlFor="organization">Organization</Label>
+        <Input
           id="organization"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          {...register("organization")}
+          disabled={isSubmitting}
         />
       </div>
 
@@ -119,13 +132,20 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
         <p className="text-sm text-gray-600">Price: {coursePrice}</p>
       </div>
 
-      <button
+      <Button
         type="submit"
+        className="w-full"
         disabled={isSubmitting}
-        className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-secondary transition-colors disabled:opacity-50"
       >
-        {isSubmitting ? "Registering..." : "Register Now"}
-      </button>
+        {isSubmitting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Registering...
+          </>
+        ) : (
+          "Register Now"
+        )}
+      </Button>
     </form>
   );
 };
