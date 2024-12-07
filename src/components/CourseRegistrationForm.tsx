@@ -29,11 +29,13 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
   });
 
   const onSubmit = async (formData: RegistrationFormData) => {
+    console.log('Starting registration submission with data:', formData);
     setIsSubmitting(true);
     
     try {
+      console.log('Attempting to insert registration into database...');
       // Insert into database
-      const { error: dbError } = await supabase.from("registrations").insert({
+      const { data, error: dbError } = await supabase.from("registrations").insert({
         full_name: formData.full_name,
         email: formData.email,
         phone: formData.phone || null,
@@ -41,11 +43,14 @@ const CourseRegistrationForm = ({ courseTitle, courseDate, coursePrice, onClose 
         course_title: courseTitle,
         course_date: courseDate,
         course_price: coursePrice,
-      });
+      }).select();
+      
+      console.log('Database response:', { data, error: dbError });
       
       if (dbError) throw dbError;
 
       // Send email notification
+      console.log('Attempting to send email notification...');
       const { error: emailError } = await supabase.functions.invoke('send-notification', {
         body: { 
           type: 'registration', 
