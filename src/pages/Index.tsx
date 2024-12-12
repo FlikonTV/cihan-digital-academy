@@ -5,6 +5,7 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import CorporateTraining from "@/components/CorporateTraining";
 import TabsDFramework from "@/components/TabsDFramework";
 import InstitutionalPartners from "@/components/InstitutionalPartners";
+import CertificationPrograms from "@/components/CertificationPrograms";
 import PreAssessmentQuiz from "@/components/quiz/PreAssessmentQuiz";
 
 const Index = () => {
@@ -12,6 +13,7 @@ const Index = () => {
     <main className="min-h-screen bg-background">
       <Hero />
       <FeaturedCourses />
+      <CertificationPrograms />
       <DeliveryMethods />
       <WhyChooseUs />
       <InstitutionalPartners />
