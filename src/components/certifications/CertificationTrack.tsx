@@ -33,9 +33,9 @@ interface CertificationTrackProps {
 
 export const CertificationTrack = ({ track }: CertificationTrackProps) => {
   return (
-    <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300 animate-fade-up">
+    <div className="p-8">
       <div className="flex items-center gap-4 mb-8">
-        <div className="p-3 rounded-xl bg-primary/10">
+        <div className="p-3 rounded-xl bg-primary/10 shadow-glow">
           <track.icon className="w-8 h-8 text-primary" />
         </div>
         <h3 className="text-2xl font-bold text-gray-900">{track.title}</h3>
@@ -46,22 +46,26 @@ export const CertificationTrack = ({ track }: CertificationTrackProps) => {
           <AccordionItem 
             key={certIndex} 
             value={certIndex.toString()}
-            className="border rounded-xl px-6 py-2 data-[state=open]:bg-muted/50"
+            className="border rounded-xl px-6 py-2 hover:bg-muted/30 transition-colors duration-300 data-[state=open]:bg-muted/50"
           >
-            <AccordionTrigger className="hover:no-underline">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-left">
-                <Badge variant="secondary" className="bg-primary/10 text-primary">
+            <AccordionTrigger className="hover:no-underline [&[data-state=open]>div]:bg-muted/50">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-left p-2 rounded-lg transition-colors duration-300">
+                <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20">
                   {cert.level}
                 </Badge>
                 <div>
                   <h4 className="text-lg font-semibold text-gray-900">{cert.title}</h4>
                   <p className="text-sm text-gray-600">{cert.designation}</p>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <Clock className="w-4 h-4" />
-                  {cert.duration}
-                  <Blocks className="w-4 h-4 ml-2" />
-                  {cert.credits}
+                <div className="flex items-center gap-4 text-sm text-gray-500 ml-auto">
+                  <span className="flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    {cert.duration}
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <Blocks className="w-4 h-4" />
+                    {cert.credits}
+                  </span>
                 </div>
               </div>
             </AccordionTrigger>
@@ -73,11 +77,11 @@ export const CertificationTrack = ({ track }: CertificationTrackProps) => {
                       <Award className="w-4 h-4 text-primary" />
                       {module.title}
                     </h5>
-                    <ul className="grid sm:grid-cols-2 gap-2 pl-6">
+                    <ul className="grid sm:grid-cols-2 gap-3 pl-6">
                       {module.topics.map((topic, topicIndex) => (
                         <li 
                           key={topicIndex}
-                          className="text-gray-600 text-sm flex items-center gap-2 before:content-['•'] before:text-primary before:mr-2"
+                          className="text-gray-600 text-sm flex items-center gap-2 before:content-['•'] before:text-primary before:mr-2 hover:text-gray-900 transition-colors duration-300"
                         >
                           {topic}
                         </li>

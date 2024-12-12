@@ -5,44 +5,59 @@ import ProjectFramework from "./certifications/ProjectFramework";
 
 const CertificationPrograms = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-up">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+    <section className="relative py-24 overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-muted/50 to-white pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
+      
+      <div className="container relative mx-auto px-4 sm:px-6">
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16 animate-fade-up">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
             Advanced Professional Certification Programs
           </h2>
-          <p className="text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600">
             Pioneering Digital Transformation and AI Innovation through comprehensive certification tracks
           </p>
         </div>
 
-        <div className="grid gap-12">
-          <AITrack />
-          <DigitalCommunicationsTrack />
+        {/* Certification Tracks */}
+        <div className="space-y-12 mb-20">
+          <div className="bg-white rounded-2xl shadow-lg shadow-primary/5 border border-primary/10 overflow-hidden animate-fade-up">
+            <AITrack />
+          </div>
+          <div className="bg-white rounded-2xl shadow-lg shadow-primary/5 border border-primary/10 overflow-hidden animate-fade-up" style={{ animationDelay: "100ms" }}>
+            <DigitalCommunicationsTrack />
+          </div>
         </div>
 
-        <div className="mt-16 p-6 bg-white rounded-xl shadow-sm border border-primary/10 animate-fade-up">
-          <h4 className="text-xl font-semibold text-gray-900 mb-4">Unique Program Features</h4>
-          <ul className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {/* Features */}
+        <div className="bg-gradient-to-br from-white to-muted/30 rounded-2xl p-8 border border-primary/10 shadow-lg shadow-primary/5 animate-fade-up">
+          <h4 className="text-xl font-semibold text-gray-900 mb-6 text-center">Program Features</h4>
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
               "Joint Certification by Cihan Digital Academy",
               "Endorsed by IUIM and IIM",
               "Blockchain-Verified Credentials",
               "Global Professional Network Access",
-              "Continuous Learning Support"
+              "Continuous Learning Support",
+              "Industry-Recognized Certification"
             ].map((feature, index) => (
               <li 
                 key={index}
-                className="flex items-center gap-2 text-gray-600"
+                className="flex items-center gap-3 p-4 bg-white/50 rounded-xl text-gray-700 hover:bg-white hover:shadow-sm transition-all duration-300"
               >
-                <Shield className="w-4 h-4 text-primary flex-shrink-0" />
-                {feature}
+                <Shield className="w-5 h-5 text-primary flex-shrink-0" />
+                <span className="text-sm font-medium">{feature}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        <ProjectFramework />
+        {/* Project Framework */}
+        <div className="mt-20">
+          <ProjectFramework />
+        </div>
       </div>
     </section>
   );
