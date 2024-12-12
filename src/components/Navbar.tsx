@@ -4,14 +4,14 @@ import { Menu, X } from "lucide-react";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const scrollToCourses = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    const coursesSection = document.getElementById('courses');
-    if (coursesSection) {
-      coursesSection.scrollIntoView({ behavior: 'smooth' });
-      setIsOpen(false);
-    }
-  };
+  const menuItems = [
+    { label: "Home", href: "/" },
+    { label: "Courses", href: "#courses" },
+    { label: "Certifications", href: "#certifications" },
+    { label: "Learning Methods", href: "#delivery" },
+    { label: "Why Choose Us", href: "#why-us" },
+    { label: "Assessment", href: "#assessment" },
+  ];
 
   return (
     <nav className="fixed w-full bg-white/95 backdrop-blur-sm z-50 shadow-sm">
@@ -26,18 +26,17 @@ const Navbar = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            {["Courses", "Learning Methods", "Why Choose Us", "Corporate Training"].map((item, index) => (
+            {menuItems.map((item, index) => (
               <a
                 key={index}
-                href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
+                href={item.href}
                 className="text-gray-700 hover:text-primary transition-colors duration-300 text-sm font-medium relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
               >
-                {item}
+                {item.label}
               </a>
             ))}
             <a 
               href="#courses" 
-              onClick={scrollToCourses}
               className="bg-primary text-white px-6 py-2.5 rounded-md hover:bg-secondary transition-all duration-300 transform hover:scale-105 text-sm font-medium shadow-md hover:shadow-lg hover:shadow-primary/25"
             >
               Enroll Now
@@ -58,20 +57,20 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-white border-t animate-fade-in">
           <div className="px-4 pt-2 pb-3 space-y-2">
-            {["Courses", "Learning Methods", "Why Choose Us", "Corporate Training"].map((item, index) => (
+            {menuItems.map((item, index) => (
               <a
                 key={index}
-                href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
+                href={item.href}
                 className="block px-3 py-2 text-gray-700 hover:text-primary hover:bg-primary/5 rounded-md transition-all duration-300 text-sm font-medium"
                 onClick={() => setIsOpen(false)}
               >
-                {item}
+                {item.label}
               </a>
             ))}
             <a 
               href="#courses" 
-              onClick={scrollToCourses}
               className="block px-3 py-2 text-primary font-medium hover:bg-primary hover:text-white rounded-md transition-all duration-300 text-sm"
+              onClick={() => setIsOpen(false)}
             >
               Enroll Now
             </a>
