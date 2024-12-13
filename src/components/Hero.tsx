@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BookOpen, Award, CheckSquare, ArrowRight } from "lucide-react";
+import { BookOpen, Award, CheckSquare, ArrowRight, Building2, GraduationCap } from "lucide-react";
 import PreAssessmentQuiz from "./quiz/PreAssessmentQuiz";
 import {
   Dialog,
@@ -20,18 +20,21 @@ const Hero = () => {
       <div className="absolute top-1/2 -translate-y-1/2 left-0 w-1/2 h-1/2 bg-gradient-to-r from-accent/10 to-transparent rounded-full blur-3xl" />
       <div className="absolute top-1/2 -translate-y-1/2 right-0 w-1/2 h-1/2 bg-gradient-to-l from-primary/10 to-transparent rounded-full blur-3xl" />
 
-      <div className="container mx-auto px-4 py-20 relative">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
-          <div className="animate-fade-up">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Transform Your Digital Future with{" "}
-              <span className="text-primary">AI Excellence</span>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Join Cihan Digital Academy's innovative programs and master the future of technology through our comprehensive AI and digital transformation courses.
+      <div className="container mx-auto px-4 py-12 relative">
+        <div className="max-w-5xl mx-auto text-center space-y-8">
+          {/* Main heading section */}
+          <div className="animate-fade-up space-y-6">
+            <h1 className="text-2xl font-semibold text-primary mb-2">Cihan Digital Academy</h1>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              Advanced Professional{" "}
+              <span className="text-primary">Certification Programs</span>
+            </h2>
+            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              Pioneering Digital Transformation and AI Innovation through comprehensive certification tracks
             </p>
           </div>
 
+          {/* Action buttons */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto animate-fade-up" style={{ animationDelay: "200ms" }}>
             {/* Pre-Assessment Quiz Button */}
             <button
@@ -85,13 +88,43 @@ const Hero = () => {
             >
               <div className="flex flex-col items-center text-center space-y-2">
                 <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                  <Award className="w-6 h-6" />
+                  <Building2 className="w-6 h-6" />
                 </div>
                 <h3 className="font-semibold text-gray-900">Corporate Training</h3>
                 <p className="text-sm text-gray-600">Custom solutions</p>
                 <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-1 transition-transform duration-300" />
               </div>
             </a>
+          </div>
+
+          {/* Institutional Partners Section */}
+          <div className="mt-16 pt-8 border-t border-gray-100 animate-fade-up" style={{ animationDelay: "400ms" }}>
+            <h3 className="text-lg font-semibold text-gray-900 mb-6">Our Institutional Partners</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Cihan Digital Academy */}
+              <div className="bg-white p-4 rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-shadow duration-300">
+                <div className="flex items-center space-x-3">
+                  <Building2 className="w-6 h-6 text-primary" />
+                  <span className="text-sm font-medium text-gray-900">Cihan Digital Academy</span>
+                </div>
+              </div>
+
+              {/* IUIM */}
+              <div className="bg-white p-4 rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-shadow duration-300">
+                <div className="flex items-center space-x-3">
+                  <GraduationCap className="w-6 h-6 text-primary" />
+                  <span className="text-sm font-medium text-gray-900">International University of Information Management</span>
+                </div>
+              </div>
+
+              {/* IIM */}
+              <div className="bg-white p-4 rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-shadow duration-300">
+                <div className="flex items-center space-x-3">
+                  <Award className="w-6 h-6 text-primary" />
+                  <span className="text-sm font-medium text-gray-900">Institute of Information Management Africa</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
