@@ -5,6 +5,7 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import CorporateTraining from "@/components/CorporateTraining";
 import InstitutionalPartners from "@/components/InstitutionalPartners";
 import Footer from "@/components/Footer";
+import MenuSection from "@/components/MenuSection";
 
 const Index = () => {
   return (
@@ -19,6 +20,9 @@ const Index = () => {
           <FeaturedCourses />
         </div>
       </div>
+
+      {/* Menu Section */}
+      <MenuSection />
 
       {/* Delivery Methods with decorative elements */}
       <div id="delivery" className="relative overflow-hidden">
