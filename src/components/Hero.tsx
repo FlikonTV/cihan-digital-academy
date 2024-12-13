@@ -20,37 +20,45 @@ const Hero = () => {
       <div className="absolute top-1/2 -translate-y-1/2 left-0 w-1/2 h-1/2 bg-gradient-to-r from-accent/10 to-transparent rounded-full blur-3xl" />
       <div className="absolute top-1/2 -translate-y-1/2 right-0 w-1/2 h-1/2 bg-gradient-to-l from-primary/10 to-transparent rounded-full blur-3xl" />
       
-      {/* Hero Image */}
-      <div className="absolute inset-0 opacity-10">
+      {/* Hero Image - Updated with a more relevant AI/tech image */}
+      <div className="absolute inset-0 opacity-15">
         <img
-          src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
-          alt="Background"
+          src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7"
+          alt="Digital Technology Background"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/90" />
       </div>
 
+      {/* Animated particles overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
+
       <div className="container mx-auto px-4 py-12 relative">
         <div className="max-w-5xl mx-auto text-center space-y-8">
-          {/* Main heading section */}
+          {/* Main heading section with enhanced typography */}
           <div className="animate-fade-up space-y-6">
-            <div className="inline-block">
-              <h1 className="text-2xl font-semibold text-primary mb-2 bg-primary/5 px-4 py-1 rounded-full">
+            <div className="inline-block animate-scale-in">
+              <h1 className="text-2xl font-semibold text-primary mb-2 bg-primary/5 px-6 py-2 rounded-full border border-primary/20 shadow-glow">
                 Cihan Digital Academy
               </h1>
             </div>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-primary to-secondary">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-primary to-secondary animate-fade-up" style={{ animationDelay: "100ms" }}>
               Advanced Professional Certification Programs in{" "}
-              <span className="text-primary">Artificial Intelligence</span> and{" "}
-              <span className="text-secondary">Digital Communications</span>
+              <span className="text-primary relative inline-block after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-1 after:bg-primary/20 after:rounded-full">
+                Artificial Intelligence
+              </span>{" "}
+              and{" "}
+              <span className="text-secondary relative inline-block after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-1 after:bg-secondary/20 after:rounded-full">
+                Digital Communications
+              </span>
             </h2>
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-3xl mx-auto animate-fade-up" style={{ animationDelay: "200ms" }}>
               Pioneering Digital Transformation through comprehensive certification tracks designed for the modern professional
             </p>
           </div>
 
           {/* Action buttons with enhanced styling */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto animate-fade-up" style={{ animationDelay: "200ms" }}>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto animate-fade-up" style={{ animationDelay: "300ms" }}>
             {/* Pre-Assessment Quiz Button */}
             <button
               onClick={() => setShowQuiz(true)}
@@ -112,30 +120,36 @@ const Hero = () => {
             </a>
           </div>
 
-          {/* Institutional Partners Section with enhanced styling */}
+          {/* Institutional Partners Section with glass morphism effect */}
           <div className="mt-16 pt-8 border-t border-gray-100 animate-fade-up" style={{ animationDelay: "400ms" }}>
             <h3 className="text-lg font-semibold text-gray-900 mb-6">Our Institutional Partners</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Cihan Digital Academy */}
-              <div className="bg-white/50 backdrop-blur-sm p-6 rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+              <div className="bg-white/50 backdrop-blur-sm p-6 rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group">
                 <div className="flex items-center space-x-3">
-                  <Building2 className="w-8 h-8 text-primary" />
+                  <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <Building2 className="w-8 h-8" />
+                  </div>
                   <span className="text-sm font-medium text-gray-900">Cihan Digital Academy</span>
                 </div>
               </div>
 
               {/* IUIM */}
-              <div className="bg-white/50 backdrop-blur-sm p-6 rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+              <div className="bg-white/50 backdrop-blur-sm p-6 rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group">
                 <div className="flex items-center space-x-3">
-                  <GraduationCap className="w-8 h-8 text-primary" />
+                  <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <GraduationCap className="w-8 h-8" />
+                  </div>
                   <span className="text-sm font-medium text-gray-900">International University of Information Management</span>
                 </div>
               </div>
 
               {/* IIM */}
-              <div className="bg-white/50 backdrop-blur-sm p-6 rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+              <div className="bg-white/50 backdrop-blur-sm p-6 rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group">
                 <div className="flex items-center space-x-3">
-                  <Award className="w-8 h-8 text-primary" />
+                  <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <Award className="w-8 h-8" />
+                  </div>
                   <span className="text-sm font-medium text-gray-900">Institute of Information Management Africa</span>
                 </div>
               </div>
