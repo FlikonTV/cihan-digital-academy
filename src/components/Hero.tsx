@@ -27,6 +27,13 @@ const Hero = () => {
             <Link
               to="#assessment"
               className="group relative bg-white hover:bg-primary/5 border border-primary/20 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1"
+              onClick={(e) => {
+                e.preventDefault();
+                const element = document.getElementById('assessment');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
               <div className="flex flex-col items-center text-center space-y-2">
                 <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
