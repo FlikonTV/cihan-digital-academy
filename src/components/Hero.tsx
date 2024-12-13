@@ -26,11 +26,12 @@ const Hero = () => {
           <div className="animate-fade-up space-y-6">
             <h1 className="text-2xl font-semibold text-primary mb-2">Cihan Digital Academy</h1>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Advanced Professional{" "}
-              <span className="text-primary">Certification Programs</span>
+              Advanced Professional Certification Programs in{" "}
+              <span className="text-primary">Artificial Intelligence</span> and{" "}
+              <span className="text-secondary">Digital Communications</span>
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Pioneering Digital Transformation and AI Innovation through comprehensive certification tracks
+              Pioneering Digital Transformation through comprehensive certification tracks designed for the modern professional
             </p>
           </div>
 
