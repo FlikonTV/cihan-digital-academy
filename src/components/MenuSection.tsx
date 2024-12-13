@@ -45,6 +45,10 @@ const MenuSection = () => {
     }
   ];
 
+  const handleCertificationClick = () => {
+    navigate('/project-framework#certifications');
+  };
+
   return (
     <section className="py-16 bg-gradient-to-b from-white via-gray-50 to-white">
       <div className="container mx-auto px-4">
@@ -82,7 +86,7 @@ const MenuSection = () => {
         </div>
         <div className="text-center mt-12">
           <button 
-            onClick={() => navigate('/project-framework')}
+            onClick={handleCertificationClick}
             className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 transition-colors duration-300"
           >
             View All Certifications
