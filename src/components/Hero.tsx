@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { BookOpen, Award, CheckSquare, ArrowRight, Building2, GraduationCap } from "lucide-react";
 import PreAssessmentQuiz from "./quiz/PreAssessmentQuiz";
+import HeroBackground from "./HeroBackground";
 import {
   Dialog,
   DialogContent,
@@ -13,13 +14,9 @@ const Hero = () => {
   const [showQuiz, setShowQuiz] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-[#1A1F2C] to-[#2C1F3C] overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:14px_24px]" />
-        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-b from-primary/20 to-transparent rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-t from-accent/20 to-transparent rounded-full blur-[120px]" />
-      </div>
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Dynamic Background */}
+      <HeroBackground />
 
       <div className="container relative mx-auto px-4 py-20 lg:py-32">
         <div className="max-w-7xl mx-auto">
@@ -54,12 +51,12 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* Action cards */}
+            {/* Action cards with glass morphism */}
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12">
               {/* Pre-Assessment Card */}
               <button
                 onClick={() => setShowQuiz(true)}
-                className="group relative bg-white/5 backdrop-blur-sm hover:bg-white/10 border border-white/10 rounded-xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1"
+                className="group relative bg-white/5 backdrop-blur-md hover:bg-white/10 border border-white/10 rounded-xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1"
               >
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="p-4 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
@@ -74,7 +71,7 @@ const Hero = () => {
               {/* Certification Programs Card */}
               <Link
                 to="/project-framework"
-                className="group relative bg-white/5 backdrop-blur-sm hover:bg-white/10 border border-white/10 rounded-xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1"
+                className="group relative bg-white/5 backdrop-blur-md hover:bg-white/10 border border-white/10 rounded-xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1"
               >
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="p-4 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
@@ -89,7 +86,7 @@ const Hero = () => {
               {/* Course Catalog Card */}
               <Link
                 to="#courses"
-                className="group relative bg-white/5 backdrop-blur-sm hover:bg-white/10 border border-white/10 rounded-xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1"
+                className="group relative bg-white/5 backdrop-blur-md hover:bg-white/10 border border-white/10 rounded-xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1"
               >
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="p-4 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
@@ -102,7 +99,7 @@ const Hero = () => {
               </Link>
             </div>
 
-            {/* Features section */}
+            {/* Features section with enhanced glass morphism */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mt-16">
               {[
                 {
@@ -123,7 +120,7 @@ const Hero = () => {
               ].map((feature, index) => (
                 <div
                   key={index}
-                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 animate-fade-up"
+                  className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 animate-fade-up"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="flex items-center space-x-4">
