@@ -4,7 +4,6 @@ import DeliveryMethods from "@/components/DeliveryMethods";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import CorporateTraining from "@/components/CorporateTraining";
 import InstitutionalPartners from "@/components/InstitutionalPartners";
-import PreAssessmentQuiz from "@/components/quiz/PreAssessmentQuiz";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -45,24 +44,6 @@ const Index = () => {
         <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-accent/5 to-transparent" />
         <div id="corporate" className="relative">
           <CorporateTraining />
-        </div>
-      </div>
-
-      {/* Assessment Section with modern design */}
-      <div id="assessment" className="relative py-20 bg-gradient-to-b from-white to-muted overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
-        <div className="container mx-auto px-4 relative">
-          <div className="max-w-3xl mx-auto text-center mb-16 animate-fade-up">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Pre-Assessment Quiz
-            </h2>
-            <p className="text-gray-600">
-              Test your knowledge and get personalized course recommendations
-            </p>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 animate-fade-up">
-            <PreAssessmentQuiz />
-          </div>
         </div>
       </div>
 
