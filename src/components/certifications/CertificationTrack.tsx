@@ -6,6 +6,15 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import CourseRegistrationForm from "@/components/CourseRegistrationForm";
 
 interface Module {
   title: string;
@@ -32,6 +41,22 @@ interface CertificationTrackProps {
 }
 
 export const CertificationTrack = ({ track }: CertificationTrackProps) => {
+  const [selectedCertification, setSelectedCertification] = useState<{
+    title: string;
+    date: string;
+    price: string;
+  } | null>(null);
+
+  const handleEnrollClick = (certification: Certification) => {
+    // For demonstration, we'll use a fixed date and price
+    // In a real application, these would come from your data
+    setSelectedCertification({
+      title: certification.title,
+      date: new Date().toISOString(), // You would want to use actual course dates
+      price: "Contact for pricing", // You would want to use actual course pricing
+    });
+  };
+
   return (
     <div className="p-8">
       <div className="flex items-center gap-4 mb-8">
@@ -89,11 +114,35 @@ export const CertificationTrack = ({ track }: CertificationTrackProps) => {
                     </ul>
                   </div>
                 ))}
+                <div className="pt-4">
+                  <Button
+                    onClick={() => handleEnrollClick(cert)}
+                    className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white"
+                  >
+                    Enroll Now
+                  </Button>
+                </div>
               </div>
             </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
+
+      <Dialog open={!!selectedCertification} onOpenChange={() => setSelectedCertification(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Course Registration</DialogTitle>
+          </DialogHeader>
+          {selectedCertification && (
+            <CourseRegistrationForm
+              courseTitle={selectedCertification.title}
+              courseDate={selectedCertification.date}
+              coursePrice={selectedCertification.price}
+              onClose={() => setSelectedCertification(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
