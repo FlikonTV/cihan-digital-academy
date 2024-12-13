@@ -55,44 +55,47 @@ export const CertificationTrack = ({ track }: CertificationTrackProps) => {
     <div className="p-8">
       <CertificationHeader icon={track.icon} title={track.title} />
 
-      <Accordion type="single" collapsible className="w-full">
+      <div className="space-y-4">
         {track.certifications.map((cert, certIndex) => (
-          <AccordionItem 
-            key={certIndex} 
-            value={`cert-${certIndex}`}
-            className="mb-4 border rounded-xl overflow-hidden bg-white hover:bg-muted/5 transition-colors duration-300"
+          <Accordion
+            key={certIndex}
+            type="single"
+            collapsible
+            className="w-full border rounded-xl overflow-hidden bg-white"
           >
-            <AccordionTrigger className="px-6 py-4 w-full hover:no-underline">
-              <CertificationDetails
-                level={cert.level}
-                title={cert.title}
-                designation={cert.designation}
-                duration={cert.duration}
-                credits={cert.credits}
-              />
-            </AccordionTrigger>
-            <AccordionContent className="px-6 pb-6">
-              <div className="space-y-6">
-                {cert.modules.map((module, moduleIndex) => (
-                  <CertificationModule
-                    key={moduleIndex}
-                    title={module.title}
-                    topics={module.topics}
-                  />
-                ))}
-                <div className="pt-4">
-                  <Button
-                    onClick={() => handleEnrollClick(cert)}
-                    className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white"
-                  >
-                    Enroll Now
-                  </Button>
+            <AccordionItem value="item-0" className="border-none">
+              <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-muted/5">
+                <CertificationDetails
+                  level={cert.level}
+                  title={cert.title}
+                  designation={cert.designation}
+                  duration={cert.duration}
+                  credits={cert.credits}
+                />
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6 data-[state=open]:animate-accordion-down">
+                <div className="space-y-6">
+                  {cert.modules.map((module, moduleIndex) => (
+                    <CertificationModule
+                      key={moduleIndex}
+                      title={module.title}
+                      topics={module.topics}
+                    />
+                  ))}
+                  <div className="pt-4">
+                    <Button
+                      onClick={() => handleEnrollClick(cert)}
+                      className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white"
+                    >
+                      Enroll Now
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         ))}
-      </Accordion>
+      </div>
 
       <EnrollmentDialog
         isOpen={!!selectedCertification}
