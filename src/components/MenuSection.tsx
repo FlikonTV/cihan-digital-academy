@@ -46,7 +46,7 @@ const MenuSection = () => {
   ];
 
   const handleCertificationClick = () => {
-    navigate('/project-framework#certifications');
+    navigate('/certifications');
   };
 
   return (

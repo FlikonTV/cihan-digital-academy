@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import ProjectFramework from "./pages/ProjectFramework";
+import Certifications from "./pages/Certifications";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/admin" element={<Admin />} />
             <Route path="/login" element={<Login />} />
             <Route path="/project-framework" element={<ProjectFramework />} />
+            <Route path="/certifications" element={<Certifications />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

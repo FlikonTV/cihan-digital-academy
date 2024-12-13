@@ -8,7 +8,7 @@ const Navbar = () => {
   const menuItems = [
     { label: "Home", href: "/" },
     { label: "Courses", href: "#courses" },
-    { label: "Certifications", href: "#certifications" },
+    { label: "Certifications", href: "/certifications" },
     { label: "Learning Methods", href: "#delivery" },
     { label: "Why Choose Us", href: "#why-us" },
     { label: "Project Framework", href: "/project-framework" },
