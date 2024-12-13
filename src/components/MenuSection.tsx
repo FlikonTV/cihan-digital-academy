@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const MenuSection = () => {
+  const navigate = useNavigate();
   const courses = [
     {
       title: "Masterclass in Artificial Intelligence (MAI)",
@@ -79,12 +81,12 @@ const MenuSection = () => {
           ))}
         </div>
         <div className="text-center mt-12">
-          <a 
-            href="#courses" 
+          <button 
+            onClick={() => navigate('/project-framework')}
             className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 transition-colors duration-300"
           >
-            View All Programs
-          </a>
+            View All Certifications
+          </button>
         </div>
       </div>
     </section>
