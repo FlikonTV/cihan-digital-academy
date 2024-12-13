@@ -30,12 +30,12 @@ const Hero = () => {
               Empower Your Future with AI and Digital Excellence
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Advance your career with globally recognized certifications. Partnered with Institute of Information Management (IUIM) and International Institute of Management (IIM), our programs deliver innovation, expertise, and real-world impact in AI and Digital Technology.
+              Advance your career with globally recognized certifications. Partnered with International University of Information Management (IUIM) and Institute of Information Management (IIM), our programs deliver innovation, expertise, and real-world impact in AI and Digital Technology.
             </p>
 
             {/* Partner Logos */}
             <div className="flex justify-center items-center gap-8 py-6">
-              {['Cihan Digital Academy', 'Institute of Information Management (IUIM)', 'International Institute of Management (IIM)'].map((partner, index) => (
+              {['Cihan Digital Academy', 'International University of Information Management (IUIM)', 'Institute of Information Management (IIM)'].map((partner, index) => (
                 <div 
                   key={index}
                   className="bg-white/5 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-white/10"
