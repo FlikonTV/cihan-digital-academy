@@ -55,12 +55,12 @@ export const CertificationTrack = ({ track }: CertificationTrackProps) => {
     <div className="p-8">
       <CertificationHeader icon={track.icon} title={track.title} />
 
-      <Accordion type="single" collapsible className="space-y-4">
+      <Accordion type="single" collapsible className="w-full space-y-4">
         {track.certifications.map((cert, certIndex) => (
           <AccordionItem 
             key={certIndex} 
-            value={certIndex.toString()}
-            className="border rounded-xl px-6 py-2 hover:bg-muted/30 transition-colors duration-300 data-[state=open]:bg-muted/50"
+            value={`item-${certIndex}`}
+            className="border rounded-xl px-6 py-2 bg-white hover:bg-muted/30 transition-colors duration-300 data-[state=open]:bg-muted/50"
           >
             <AccordionTrigger className="hover:no-underline [&[data-state=open]>div]:bg-muted/50">
               <CertificationDetails
