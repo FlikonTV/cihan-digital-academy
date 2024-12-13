@@ -58,15 +58,15 @@ export const CertificationTrack = ({ track }: CertificationTrackProps) => {
         {track.certifications.map((cert, index) => (
           <div
             key={index}
-            className="rounded-xl border bg-white overflow-hidden transition-all duration-300"
+            className="border border-primary/10 rounded-xl bg-white overflow-hidden transition-all duration-300 hover:shadow-lg"
           >
             <button
               onClick={() => toggleExpand(index)}
               className="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-muted/5 transition-colors"
             >
               <div className="flex-1">
-                <div className="flex items-center gap-4">
-                  <span className={`px-3 py-1 rounded-md text-sm font-medium ${
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                  <span className={`inline-flex px-3 py-1 rounded-md text-sm font-medium ${
                     cert.level === "Entry-Level" 
                       ? "bg-purple-100 text-purple-700"
                       : cert.level === "Mid-Level"
@@ -107,10 +107,12 @@ export const CertificationTrack = ({ track }: CertificationTrackProps) => {
 
             <div
               className={`overflow-hidden transition-all duration-300 ${
-                expandedCertIndex === index ? "max-h-[2000px]" : "max-h-0"
+                expandedCertIndex === index 
+                  ? "max-h-[2000px] opacity-100"
+                  : "max-h-0 opacity-0"
               }`}
             >
-              <div className="px-6 pb-6 space-y-6">
+              <div className="px-6 pb-6 space-y-6 border-t border-primary/10">
                 {cert.modules.map((module, moduleIndex) => (
                   <CertificationModule
                     key={moduleIndex}
