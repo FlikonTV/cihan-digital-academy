@@ -12,7 +12,7 @@ const Navbar = () => {
     { label: "Learning Methods", href: "#delivery" },
     { label: "Why Choose Us", href: "#why-us" },
     { label: "Project Framework", href: "/project-framework" },
-    { label: "Assessment", href: "#assessment" },
+    { label: "Assessment", href: "/assessment" },
   ];
 
   return (
@@ -28,34 +28,34 @@ const Navbar = () => {
               />
             </Link>
           </div>
-          
-          <div className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item, index) => (
-              item.href.startsWith('/') ? (
-                <Link
-                  key={index}
-                  to={item.href}
-                  className="text-gray-700 hover:text-primary transition-colors duration-300 text-sm font-medium relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <a
-                  key={index}
-                  href={item.href}
-                  className="text-gray-700 hover:text-primary transition-colors duration-300 text-sm font-medium relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
-                >
-                  {item.label}
-                </a>
-              )
-            ))}
-            <a 
-              href="#courses" 
-              className="bg-primary text-white px-6 py-2.5 rounded-md hover:bg-secondary transition-all duration-300 transform hover:scale-105 text-sm font-medium shadow-md hover:shadow-lg hover:shadow-primary/25"
+      
+      <div className="hidden md:flex items-center space-x-8">
+        {menuItems.map((item, index) => (
+          item.href.startsWith('/') ? (
+            <Link
+              key={index}
+              to={item.href}
+              className="text-gray-700 hover:text-primary transition-colors duration-300 text-sm font-medium relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
             >
-              Enroll Now
+              {item.label}
+            </Link>
+          ) : (
+            <a
+              key={index}
+              href={item.href}
+              className="text-gray-700 hover:text-primary transition-colors duration-300 text-sm font-medium relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left"
+            >
+              {item.label}
             </a>
-          </div>
+          )
+        ))}
+        <a 
+          href="#courses" 
+          className="bg-primary text-white px-6 py-2.5 rounded-md hover:bg-secondary transition-all duration-300 transform hover:scale-105 text-sm font-medium shadow-md hover:shadow-lg hover:shadow-primary/25"
+        >
+          Enroll Now
+        </a>
+      </div>
 
           <div className="md:hidden flex items-center">
             <button 
