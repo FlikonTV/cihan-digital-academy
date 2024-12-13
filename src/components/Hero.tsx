@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
 import { BookOpen, Award, CheckSquare, ArrowRight } from "lucide-react";
+import PreAssessmentQuiz from "./quiz/PreAssessmentQuiz";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useState } from "react";
 
 const Hero = () => {
+  const [showQuiz, setShowQuiz] = useState(false);
+
   return (
     <div className="relative min-h-[calc(100vh-5rem)] flex items-center justify-center overflow-hidden">
       {/* Background decorative elements */}
@@ -24,16 +34,9 @@ const Hero = () => {
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto animate-fade-up" style={{ animationDelay: "200ms" }}>
             {/* Pre-Assessment Quiz Button */}
-            <Link
-              to="#assessment"
+            <button
+              onClick={() => setShowQuiz(true)}
               className="group relative bg-white hover:bg-primary/5 border border-primary/20 rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1"
-              onClick={(e) => {
-                e.preventDefault();
-                const element = document.getElementById('assessment');
-                if (element) {
-                  element.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
             >
               <div className="flex flex-col items-center text-center space-y-2">
                 <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
@@ -43,7 +46,7 @@ const Hero = () => {
                 <p className="text-sm text-gray-600">Test your knowledge</p>
                 <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-1 transition-transform duration-300" />
               </div>
-            </Link>
+            </button>
 
             {/* Certification Courses Button */}
             <Link
@@ -92,6 +95,16 @@ const Hero = () => {
           </div>
         </div>
       </div>
+
+      {/* Quiz Dialog */}
+      <Dialog open={showQuiz} onOpenChange={setShowQuiz}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>AI Knowledge Assessment Quiz</DialogTitle>
+          </DialogHeader>
+          <PreAssessmentQuiz />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
